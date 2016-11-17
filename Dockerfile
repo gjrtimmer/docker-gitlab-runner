@@ -1,6 +1,8 @@
 FROM sameersbn/ubuntu:latest
 MAINTAINER "G.J.R. Timmer <gjr.timmer@gmail.com>"
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Update Image
 RUN apt-get update -y && \
 	apt-get upgrade -y && \
