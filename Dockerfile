@@ -1,6 +1,7 @@
 FROM sameersbn/ubuntu:latest
 MAINTAINER "G.J.R. Timmer <gjr.timmer@gmail.com>"
 
+# Set DOCKER VERSION to 1.11.2 for Synology NAS 6.0.x
 ARG DEBIAN_FRONTEND=noninteractive
 ARG DOCKER_VERSION=1.11.2
 ARG DOCKER_MACHINE_VERSION=0.8.2
