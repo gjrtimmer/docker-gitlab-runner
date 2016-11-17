@@ -39,12 +39,13 @@ RUN echo "deb https://apt.dockerproject.org/repo ubuntu-`lsb_release -cs` main" 
 	
 # Install GitLab Runner
 RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.deb.sh | sudo bash &&	\
-	apt-get install -y gitlab-ci-multi-runner && \
+	apt-get install -y gitlab-ci-multi-runner  git-core openssh-client && \
 	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* && \
+	rm -rf /var/lib/apt/lists/*
+
+# Copy Entrypoint, chmod not required, mod 755 is already set on source file
+COPY entrypoint.sh /sbin/entrypoint.sh
 	
-# Configure GitLab Runner
-	mkdir -p /etc/gitlab-runner/certs && \
-	chmod -R 700 /etc/gitlab-runner
-	
-VOLUME ["/etc/gitlab-runner", "/home/gitlab-runner"]
+VOLUME ["${GITLAB_RUNNER_DATA}"]
+WORKDIR "${GITLAB_RUNNER_HOME}"
+ENTRYPOINT ["/sbin/entrypoint.sh"]
