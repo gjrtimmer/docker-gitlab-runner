@@ -1,10 +1,9 @@
 FROM sameersbn/ubuntu:latest
 MAINTAINER "G.J.R. Timmer <gjr.timmer@gmail.com>"
 
-# Merge Build Arguments in Single Layer
-ARG DEBIAN_FRONTEND=noninteractive \
-	DOCKER_MACHINE_VERSION=0.8.2 \
-	GITLAB_RUNNER_VERSION=1.7.3
+ARG DEBIAN_FRONTEND=noninteractive
+ARG DOCKER_MACHINE_VERSION=0.8.2
+ARG GITLAB_RUNNER_VERSION=1.7.3
 
 # Update Image
 RUN apt-get update -y && \
