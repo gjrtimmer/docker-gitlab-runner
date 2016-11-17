@@ -1,5 +1,5 @@
 
-# datacore/gitlab-ci-multi-runner:1.1.4-5
+# datacore/gitlab-runner:1.7.3
 
 - [Introduction](#introduction)
   - [Contributing](#contributing)
