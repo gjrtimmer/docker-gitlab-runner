@@ -16,4 +16,4 @@ RUN apt-get update -y && \
 RUN echo "deb https://apt.dockerproject.org/repo ubuntu-`lsb_release -cs` main" | tee /etc/apt/sources.list.d/docker.list && \
 	apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
 	apt-get update && \
-	apt-get install -y docker-engine docker-compose
+	apt-get install -y docker-engine
