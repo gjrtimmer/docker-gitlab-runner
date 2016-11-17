@@ -18,7 +18,6 @@ RUN apt-get update -y && \
 #	- docker-compose
 #	- docker-machine
 # Runner will access the docker of the host through a binded docker socket
-# Docker must be installed before the gitlab-runner
 #
 RUN echo "deb https://apt.dockerproject.org/repo ubuntu-`lsb_release -cs` main" | tee /etc/apt/sources.list.d/docker.list && \
 	apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
@@ -36,4 +35,12 @@ RUN echo "deb https://apt.dockerproject.org/repo ubuntu-`lsb_release -cs` main" 
 	
 # Install GitLab Runner
 RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.deb.sh | sudo bash &&	\
-	apt-get install -y gitlab-ci-multi-runner
+	apt-get install -y gitlab-ci-multi-runner && \
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/* && \
+	
+# Configure GitLab Runner
+	mkdir -p /etc/gitlab-runner/certs && \
+	chmod -R 700 /etc/gitlab-runner
+	
+VOLUME ["/etc/gitlab-runner", "/home/gitlab-runner"]
