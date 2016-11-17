@@ -6,6 +6,11 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG DOCKER_VERSION=1.11.2
 ARG DOCKER_MACHINE_VERSION=0.8.2
 
+# Environment
+ENV GITLAB_RUNNER_USER=gitlab \
+	GITLAB_RUNNER_HOME=/home/gitlab-runner
+ENV GITLAB_RUNNER_DATA=${GITLAB_RUNNER_HOME}/data
+
 # Update Image
 RUN apt-get update -y && \
 	apt-get upgrade -y && \
