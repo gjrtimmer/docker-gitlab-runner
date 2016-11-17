@@ -1,8 +1,9 @@
 
 # datacore/gitlab-runner:1.7.1
 
-Note: This branch is specific for running on Synology NAS.
-Current Synology NAS DSM 6.0.x is combined with Docker version 1.11.2
+Note: For synology NAS devices, which have docker support,
+there is image available which conforms to the docker version
+of synology. Current Synology NAS DSM 6.0.x is combined with Docker version 1.11.2
 Docker 1.11.2 uses API version 1.23 while the latest docker-engine is already on API 1.24
 Because this causes a API conflict; the ```datacore/gitlab-runner:latest``` image
 cannot be used on a Synology NAS.
