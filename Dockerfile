@@ -15,7 +15,7 @@ RUN apt-get update -y && \
 # Install docker
 #	- docker-engine
 #	- docker-compose
-#   - docker-machine
+#	- docker-machine
 # Runner will access the docker of the host through
 # a binded docker socket
 RUN echo "deb https://apt.dockerproject.org/repo ubuntu-`lsb_release -cs` main" | tee /etc/apt/sources.list.d/docker.list && \
