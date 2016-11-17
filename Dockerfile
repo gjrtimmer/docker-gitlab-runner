@@ -1,7 +1,10 @@
 FROM sameersbn/ubuntu:latest
 MAINTAINER "G.J.R. Timmer <gjr.timmer@gmail.com>"
 
-ARG DEBIAN_FRONTEND=noninteractive
+# Merge Build Arguments in Single Layer
+ARG DEBIAN_FRONTEND=noninteractive \
+	DOCKER_MACHINE_VERSION=0.8.2 \
+	GITLAB_RUNNER_VERSION=1.7.3
 
 # Update Image
 RUN apt-get update -y && \
@@ -10,7 +13,10 @@ RUN apt-get update -y && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
-# Install docker-engine and docker-compose
+# Install docker
+#	- docker-engine
+#	- docker-compose
+#   - docker-machine
 # Runner will access the docker of the host through
 # a binded docker socket
 RUN echo "deb https://apt.dockerproject.org/repo ubuntu-`lsb_release -cs` main" | tee /etc/apt/sources.list.d/docker.list && \
@@ -19,5 +25,7 @@ RUN echo "deb https://apt.dockerproject.org/repo ubuntu-`lsb_release -cs` main" 
 	apt-get install -y docker-engine python-pip && \
 	pip install --upgrade pip && \
 	pip install docker-compose && \
+	wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
+	chmod +x /usr/bin/docker-machine && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
