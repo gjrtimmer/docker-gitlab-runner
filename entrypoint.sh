@@ -81,8 +81,10 @@ configure_ci_runner() {
 			gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml \
 			-n -u "${CI_SERVER_URL}" -r "${RUNNER_TOKEN}" --name "${RUNNER_DESCRIPTION}" --executor "${RUNNER_EXECUTOR}"
 		else
-			sudo -HEu ${GITLAB_RUNNER_USER} gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml
+			echo "Missing Required Parameter"
 		fi
+	else
+		sudo -HEu ${GITLAB_RUNNER_USER} gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml
 	fi
 }
 
