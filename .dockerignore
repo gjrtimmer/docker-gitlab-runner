@@ -4,3 +4,4 @@ VERSION
 REPOSITORY
 Makefile
 Changelog.md
+examples/*

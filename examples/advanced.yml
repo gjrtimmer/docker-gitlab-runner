@@ -1,0 +1,57 @@
+version: '2'
+
+# The following comes from my personal setup
+
+services:
+  gitlab-runner:
+    container_name: gitlab-runner
+    hostname: runner
+    restart: always
+    image: datacore/gitlab-runner:1.7.1
+    volumes:
+      - /volume1/Docker/gitlab/var/lib/runner:/home/gitlab-runner/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - CI_SERVER_URL=
+      - RUNNER_TOKEN=
+      - RUNNER_EXECUTOR=docker
+      - RUNNER_DESCRIPTION=GitLab Runner
+      
+      # Provide default image
+      # This gets overriden by the `image:` tag 
+      # within your .gitlab-ci.yml of your project.
+      # REQUIRED when using executor=docker
+      - RUNNER_DOCKER_IMAGE=docker:latest
+      
+      # This will mount the a certain hostdirectory
+      # to all created sub containers when running your build
+      # this means that when you specify for example within
+      # your .gitlab-ci.yml the tag `image: golang:1.7.3` to process your build
+      # the mount point defined within `DOCKER_VOLUMES` will be mounted not in
+      # your runner but in your build container.
+      - DOCKER_VOLUMES=/volume1/Docker/gitlab/var/lib/runner:/runner
+        
+      # Can you use the `DOCKER_VOLUMES` with `RUNNER_PRE_BUILD_SCRIPT`
+      # On the host you can create a script which you want to run for every build.
+      # Then you mount the directory with this script or its parent into
+      # every container created by the runner.
+      #
+      # Then you configure the key below to run a certain script for every build.
+      #
+      # Why I'm using this:
+      # It's a known problem that GitLab runner will not checkout or correctly initialize
+      # submodules. Now you can simple add the command: `git submodule update --init` as
+      # a first line of your build script within .gitlab-ci.yml.
+      #
+      # I've opted to define this in a simple bash script.
+      # now when I start a new project or add CI to an existing project
+      # I no longer have to worry about failed because my pre build script handles
+      # all default initialization.
+      - RUNNER_PRE_BUILD_SCRIPT=/runner/scripts/pre-build.sh
+      
+      # This will remove all containers when build has finished
+      - DOCKER_DISABLE_CACHE=true
+      
+      # If you do not have a seperate network for all of your gitlab containers
+      # Then remove this key
+      - DOCKER_NETWORK_MODE=gitlab

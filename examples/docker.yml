@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  gitlab-runner:
+    container_name: gitlab-runner
+    hostname: runner
+    restart: always
+    image: datacore/gitlab-runner:1.7.1
+    volumes:
+      - /volume1/Docker/gitlab/var/lib/runner:/home/gitlab-runner/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - CI_SERVER_URL=
+      - RUNNER_TOKEN=
+      - RUNNER_EXECUTOR=docker
+      - RUNNER_DESCRIPTION=GitLab Runner
+      
+      # Provide default image
+      # This gets overriden by the `image:` tag 
+      # within your .gitlab-ci.yml of your project.
+      # REQUIRED when using executor=docker
+      - RUNNER_DOCKER_IMAGE=docker:latest

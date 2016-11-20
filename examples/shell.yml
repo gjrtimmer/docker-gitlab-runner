@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  gitlab-runner:
+    container_name: gitlab-runner
+    hostname: runner
+    restart: always
+    image: datacore/gitlab-runner:1.7.1
+    volumes:
+      - /HOST_DATA_DIRECTORY:/home/gitlab-runner/data
+    environment:
+      - CI_SERVER_URL=
+      - RUNNER_TOKEN=
+      - RUNNER_EXECUTOR=shell
+      - RUNNER_DESCRIPTION=GitLab Runner
