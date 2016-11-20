@@ -81,12 +81,9 @@ configure_ci_runner() {
 				if [[ -n ${RUNNER_DOCKER_IMAGE} ]];then
 					RUNNER_DOCKER_ARGS="--docker-image ${RUNNER_DOCKER_IMAGE}"
 				fi
-				#if [[ "${RUNNER_DOCKER_MODE}" == "socket" ]];then
-				#	RUNNER_DOCKER_ARGS="$RUNNER_DOCKER_ARGS --docker-volumes /var/run/docker.sock:/var/run/docker.sock"
-				#fi
 			fi
 			sudo -HEu ${GITLAB_RUNNER_USER} \
-			gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml --non-interactive \
+			gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml \
 			-n -u "${CI_SERVER_URL}" -r "${RUNNER_TOKEN}" --name "${RUNNER_DESCRIPTION}" --executor "${RUNNER_EXECUTOR}" ${RUNNER_DOCKER_ARGS}
 		else
 			echo "Missing Required Parameter"
