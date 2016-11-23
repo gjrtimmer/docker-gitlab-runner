@@ -48,6 +48,12 @@ create_data_dir() {
 	echo " [DONE]"
 }
 
+create_docker_config_dir() {
+	echo -n "Creating ~/.docker Directory..."
+	sudo -HEu ${GITLAB_RUNNER_USER} mkdir -p ${GITLAB_RUNNER_DATA}/.docker/
+	echo " [DONE]"
+}
+
 update_ca_certificates() {
 	if [[ -f ${CA_CERTIFICATES_PATH} ]]; then
 		echo -n "Updating CA certificates..."
@@ -108,6 +114,7 @@ if [[ -z ${1} ]]; then
 	create_data_dir
 	update_ca_certificates
 	generate_ssh_deploy_keys
+	create_docker_config_dir
 	grant_access_to_docker_socket
 	configure_ci_runner
 
