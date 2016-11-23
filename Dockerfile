@@ -43,8 +43,11 @@ RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-mu
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
 	
-# Configure GitLab Runner
-	sudo -HEu ${GITLAB_RUNNER_USER} ln -sf ${GITLAB_RUNNER_DATA}/.ssh ${GITLAB_RUNNER_HOME}/.ssh
+	# Link .ssh for permanent storage
+	sudo -HEu ${GITLAB_RUNNER_USER} ln -sf ${GITLAB_RUNNER_DATA}/.ssh ${GITLAB_RUNNER_HOME}/.ssh && \
+	
+	# Link .docker for permanent storage for Docker Logins Private repositories
+	sudo -HEu ${GITLAB_RUNNER_USER} ln -sf ${GITLAB_RUNNER_DATA}/.docker ${GITLAB_RUNNER_HOME}/.docker
 
 # Copy Entrypoint, chmod not required, mod 755 is already set on source file
 COPY entrypoint.sh /sbin/entrypoint.sh
