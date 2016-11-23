@@ -1,5 +1,5 @@
 
-# datacore/gitlab-runner:1.7.1
+# datacore/gitlab-runner:1.7.1-1
 
 > **Note**: For synology NAS devices, there is image available which conforms to the docker version
 of synology. Current Synology NAS DSM 6.0.x is combined with Docker version 1.11.2.
