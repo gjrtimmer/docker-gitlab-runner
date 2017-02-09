@@ -7,9 +7,8 @@ ARG VCS_REF
 ARG DOCKER_ENGINE_VERSION=1.11.2-r1
 ARG DOCKER_MACHINE_VERSION=0.9.0
 
-ENV GITLAB_RUNNER_USER=gitlab-runner \
-	GITLAB_RUNNER_HOME=/home/gitlab-runner
-ENV GITLAB_RUNNER_DATA=${GITLAB_RUNNER_HOME}/data
+ENV GITLAB_RUNNER_HOME=/home/gitlab-runner \
+	GITLAB_RUNNER_DATA=/home/gitlab-runner/data
 
 LABEL \
 	nl.timmertech.build-date=${BUILD_DATE} \
