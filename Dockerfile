@@ -43,6 +43,7 @@ RUN echo 'http://nl.alpinelinux.org/alpine/v3.4/community'  >> /etc/apk/reposito
 	pip install docker-compose
 	
 RUN wget -O /usr/bin/gitlab-ci-multi-runner https://gitlab-ci-multi-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-ci-multi-runner-linux-amd64 && \
+	chmod +x /usr/bin/gitlab-ci-multi-runner && \
 	ln -s /usr/bin/gitlab-ci-multi-runner /usr/bin/gitlab-runner && \
 
 	# Add user
