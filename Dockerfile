@@ -17,7 +17,6 @@ LABEL \
 
 RUN echo 'http://pkgs.timmertech.nl/main' >> /etc/apk/repositories && \
 	echo 'http://nl.alpinelinux.org/alpine/v3.4/community'  >> /etc/apk/repositories && \
-	echo 'http://nl.alpinelinux.org/alpine/v3.5/community'  >> /etc/apk/repositories && \
 	wget -O /etc/apk/keys/gjr.timmer@gmail.com-5857d36d.rsa.pub http://pkgs.timmertech.nl/keys/gjr.timmer%40gmail.com-5857d36d.rsa.pub && \
 	apk upgrade --update --no-cache && \
 	apk add --no-cache --update \
@@ -30,7 +29,7 @@ RUN echo 'http://pkgs.timmertech.nl/main' >> /etc/apk/repositories && \
 		gcc \
 		musl-dev \
 		openssl \
-		docker=${DOCKER_ENGINE_VERSION} && \
+		docker=${DOCKER_ENGINE_VERSION} \
 		py2-pip && \
 	wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
 	chmod +x /usr/bin/docker-machine && \
