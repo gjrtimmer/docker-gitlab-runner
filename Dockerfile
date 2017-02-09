@@ -19,23 +19,20 @@ LABEL \
 	nl.timmertech.vcs-ref=${VCS_REF} \
 	nl.timmertech.license=MIT
 
-RUN echo 'http://pkgs.timmertech.nl/main' >> /etc/apk/repositories && \
-	echo 'http://nl.alpinelinux.org/alpine/v3.4/community'  >> /etc/apk/repositories && \
-	wget -O /etc/apk/keys/gjr.timmer@gmail.com-5857d36d.rsa.pub http://pkgs.timmertech.nl/keys/gjr.timmer%40gmail.com-5857d36d.rsa.pub && \
-	
+RUN echo 'http://nl.alpinelinux.org/alpine/v3.4/community'  >> /etc/apk/repositories && \
 	apk upgrade --update --no-cache && \
 	apk add --no-cache --update \
-		ca-certificates \
-		wget \
-		git \
-		curl \
-		openssh \
 		bash \
+		ca-certificates \
+		shadow \
+		sudo \
+		wget \
+		curl \
+		git \
+		openssh \
 		gcc \
 		musl-dev \
 		openssl \
-		sudo \
-		shadow \
 		docker=${DOCKER_ENGINE_VERSION} \
 		py2-pip && \
 	
