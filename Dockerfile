@@ -48,12 +48,18 @@ RUN wget -O /usr/bin/gitlab-ci-multi-runner https://gitlab-ci-multi-runner-downl
 	# Add user
 	useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash && \
 	
+	# Fix Sudo
+	echo "gitlab-runner ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gitlab-runner && \
+	chmod 600 /etc/sudoers.d/gitlab-runner && \
+	
 	# Link .ssh for permanent storage
-	sudo -HEu ${GITLAB_RUNNER_USER} ln -sf ${GITLAB_RUNNER_DATA}/.ssh ${GITLAB_RUNNER_HOME}/.ssh && \
+	sudo -HEu gitlab-runner ln -sf ${GITLAB_RUNNER_DATA}/.ssh ${GITLAB_RUNNER_HOME}/.ssh && \
 	
 	# Link .docker for permanent storage for Docker Logins Private repositories
-	sudo -HEu ${GITLAB_RUNNER_USER} ln -sf ${GITLAB_RUNNER_DATA}/.docker ${GITLAB_RUNNER_HOME}/.docker
-	
+	sudo -HEu gitlab-runner ln -sf ${GITLAB_RUNNER_DATA}/.docker ${GITLAB_RUNNER_HOME}/.docker
+
+COPY rootfs/ /
+
 VOLUME [ "${GITLAB_RUNNER_DATA}" ]
 WORKDIR ${GITLAB_RUNNER_HOME}
 
