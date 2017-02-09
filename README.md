@@ -11,7 +11,7 @@
 - [Installation](#installation)
   - [DockerHub](#install-from-dockerhub)
   - [TimmerTech](#install-from-timmertech)
-
+- [Components](#components)
 
 # Docker Registries
 
@@ -50,3 +50,11 @@ Build:
 ```bash
 docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitlab-runner
 ```
+
+# Components
+
+ - gitlab-runner
+ - docker-engine
+ - docker-compose
+ - docker-machine
+ 
