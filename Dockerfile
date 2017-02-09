@@ -16,8 +16,8 @@ LABEL \
 	nl.timmertech.license=MIT
 
 RUN echo 'http://pkgs.timmertech.nl/main' >> /etc/apk/repositories && \
-	echo 'http://nl.alpinelinux.org/alpine/3.4/community'  >> /etc/apk/repositories && \
-	echo 'http://nl.alpinelinux.org/alpine/3.5/community'  >> /etc/apk/repositories && \
+	echo 'http://nl.alpinelinux.org/alpine/v3.4/community'  >> /etc/apk/repositories && \
+	echo 'http://nl.alpinelinux.org/alpine/v3.5/community'  >> /etc/apk/repositories && \
 	wget -O /etc/apk/keys/gjr.timmer@gmail.com-5857d36d.rsa.pub http://pkgs.timmertech.nl/keys/gjr.timmer%40gmail.com-5857d36d.rsa.pub && \
 	apk upgrade --update --no-cache && \
 	apk add --no-cache --update \
