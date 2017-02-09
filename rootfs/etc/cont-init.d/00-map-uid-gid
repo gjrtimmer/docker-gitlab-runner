@@ -24,8 +24,8 @@ GR_UID=${GR_UID:-$GR_UID_ORIG}
 
 # Alter UID/GID if requested
 if [[ ${GR_UID} != ${GR_UID_ORIG} ]] || [[ ${GR_GID} != ${GR_GID_ORIG} ]]; then
-	echo "  Adapting uid and gid for gitlab-runner:gitlab-runner to ${GR_UID}:${GR_GID}"
-	groupmod -o -g ${GR_GID} gitlab-runner
+	echo "  Adapting uid and gid for gitlab-runner:users to ${GR_UID}:${GR_GID}"
+	groupmod -o -g ${GR_GID} users
 	sed -i -e "s|:${GR_UID_ORIG}:${GR_GID}:|:${GR_UID}:${GR_GID}:|" /etc/passwd
 	find ${GITLAB_RUNNER_HOME} -path ${GITLAB_RUNNER_DATA}/\* -prune -o -print0 | xargs -0 chown -h gitlab-runner:
 fi
