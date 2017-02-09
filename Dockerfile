@@ -4,7 +4,8 @@ MAINTAINER G.J.R. Timmer <gjr.timmer@gmail.com>
 ARG BUILD_DATE
 ARG VCS_REF
 
-ARG DOCKER_VERSION=1.11.2-r1
+ARG DOCKER_ENGINE_VERSION=1.11.2-r1
+ARG DOCKER_MACHINE_VERSION=0.9.0
 
 LABEL \
 	nl.timmertech.build-date=${BUILD_DATE} \
@@ -17,7 +18,6 @@ LABEL \
 RUN echo 'http://pkgs.timmertech.nl/main' >> /etc/apk/repositories && \
 	echo 'http://nl.alpinelinux.org/alpine/3.4/community'  >> /etc/apk/repositories && \
 	echo 'http://nl.alpinelinux.org/alpine/3.5/community'  >> /etc/apk/repositories && \
-	echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
 	wget -O /etc/apk/keys/gjr.timmer@gmail.com-5857d36d.rsa.pub http://pkgs.timmertech.nl/keys/gjr.timmer%40gmail.com-5857d36d.rsa.pub && \
 	apk upgrade --update --no-cache && \
 	apk add --no-cache --update \
@@ -30,7 +30,12 @@ RUN echo 'http://pkgs.timmertech.nl/main' >> /etc/apk/repositories && \
 		gcc \
 		musl-dev \
 		openssl \
-		docker=${DOCKER_VERSION} && \
+		docker=${DOCKER_ENGINE_VERSION} && \
+		py2-pip && \
+	wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
+	chmod +x /usr/bin/docker-machine && \
+	pip install --upgrade pip && \
+	pip install docker-compose && \
 	sync
 	
 # EOF
