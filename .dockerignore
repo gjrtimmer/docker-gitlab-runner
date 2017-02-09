@@ -1,0 +1,9 @@
+.git
+.gitattributes
+.gitignore
+.gitlab-ci.yml
+CHANGELOG.md
+LICENSE
+README.md
+REPOSITORY
+VERSION
