@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+sudo -HEu gitlab-runner mkdir -p ${GITLAB_RUNNER_DATA}/.docker/
+
+# EOF
