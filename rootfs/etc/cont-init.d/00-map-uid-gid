@@ -3,7 +3,7 @@ set -e
 
 # MAP UID/GID
 GR_UID=${GR_UID:-gitlab-runner}
-GR_GID=${GR_GID:gitlab-runner}
+GR_GID=${GR_GID:users}
 
 # Check if provided UID by user is numerical
 if [[ $GR_UID != *[[:digit:]]* ]]; then

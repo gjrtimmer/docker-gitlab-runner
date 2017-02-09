@@ -10,6 +10,6 @@ if [ -d ${GITLAB_RUNNER_DATA} ]; then
 	find ${GITLAB_RUNNER_DATA} -type d -exec chmod 0700 {} \;
 fi
 
-chown -R gitlab-runner:gitlab-runner ${GITLAB_RUNNER_DATA}
+chown -R gitlab-runner:users ${GITLAB_RUNNER_DATA}
 
 # EOF
