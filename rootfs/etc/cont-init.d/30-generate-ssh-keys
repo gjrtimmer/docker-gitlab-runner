@@ -8,15 +8,16 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/.ssh/id_rsa || ! -e ${GITLAB_RUNNER_DATA}/.ssh/
 	rm -rf ${GITLAB_RUNNER_DATA}/.ssh/id_rsa ${GITLAB_RUNNER_DATA}/.ssh/id_rsa.pub
 	sudo -HEu gitlab-runner ssh-keygen -t rsa -N "" -f ${GITLAB_RUNNER_DATA}/.ssh/id_rsa
 	echo " [DONE]"
-
-	echo -n "Your SSH deploy key is: "
-	cat ${GITLAB_RUNNER_DATA}/.ssh/id_rsa.pub
-	echo ""
 fi
 
 echo -n "Setting SSH Permissions..."
 chmod 600 ${GITLAB_RUNNER_DATA}/.ssh/id_rsa ${GITLAB_RUNNER_DATA}/.ssh/id_rsa.pub
 chmod 700 ${GITLAB_RUNNER_DATA}/.ssh
 chown -R gitlab-runner:users ${GITLAB_RUNNER_DATA}/.ssh/
+echo " [DONE]"
+
+echo -n "Your SSH deploy key is: "
+cat ${GITLAB_RUNNER_DATA}/.ssh/id_rsa.pub
+echo ""
 
 # EOF
