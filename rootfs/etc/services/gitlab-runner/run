@@ -1,7 +1,8 @@
 #!/usr/bin/with-contenv bash
 set -e
 
-exec s6-setuidgid gitlab-runner /usr/bin/gitlab-runner -- run \
+# Run in system mode
+exec gitlab-runner /usr/bin/gitlab-runner -- run \
 		--working-directory ${GITLAB_RUNNER_DATA} \
 		--config ${GITLAB_RUNNER_DATA}/config.toml;
 
