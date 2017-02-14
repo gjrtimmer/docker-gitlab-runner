@@ -16,11 +16,13 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 			fi
 		fi
 		
+		echo "NEW Registration"
 		gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml ${RUNNER_DOCKER_ARGS}
 	else
 		echo "Missing Required environment variable"
 	fi
 else
+	echo "DOUBLE OLD Registration"
 	gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml
 fi
 
