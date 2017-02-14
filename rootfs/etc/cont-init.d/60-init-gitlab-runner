@@ -16,8 +16,7 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 		fi
 		
 		# Run gitlab-runner in system-mode
-		gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml \
-		-n -u "${CI_SERVER_URL}" -r "${RUNNER_TOKEN}" --name "${RUNNER_DESCRIPTION}" --executor "${RUNNER_EXECUTOR}" ${RUNNER_DOCKER_ARGS}
+		gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml -n -u "${CI_SERVER_URL}" -r "${RUNNER_TOKEN}" --name "${RUNNER_DESCRIPTION}" --executor "${RUNNER_EXECUTOR}" ${RUNNER_DOCKER_ARGS}
 	else
 		echo "Missing Required Parameter"
 	fi
