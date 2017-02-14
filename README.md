@@ -58,3 +58,46 @@ docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitla
  - docker-compose
  - docker-machine
  
+# Volumes
+
+| Path | Variable | Description |
+|------|----------|-------------|
+| ~ | ```GITLAB_RUNNER_HOME``` | Home Directory |
+| ~/data | ```GITLAB_RUNNER_DATA``` | Data directory, persistent volume location |
+ 
+# Configuration
+
+## General Options
+| Variable | Default | Description |
+|----------|---------|-------------|
+| ```GR_UID``` | - | GitLab Runner UID |
+| ```GR_GID``` | - | GitLab Runner GID |
+
+## Gitlab Runner Options
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| ```CI_SERVER_URL``` | - | CI URL; example: gitlab.com/ci |
+| ```RUNNER_TOKEN``` | - | Gitlab Runner token |
+| ```RUNNER_EXECUTOR``` | shell | Runner executor |
+| ```RUNNER_DESCRIPTION``` | gitlab-runner | Description of runner |
+| ```RUNNER_TAG_LIST``` | - | Runner Tag list |
+| ```RUNNER_PRE_CLONE_SCRIPT``` | - | Runner-specific command script executed before code is pulled |
+| ```RUNNER_PRE_BUILD_SCRIPT``` | - | Runner-specific command script executed after code is pulled, just before build executes |
+| ```RUNNER_DOCKER_IMAGE``` | docker:latest | Default docker image ton use if executor is docker |
+
+## GitLab Runner SSH Options
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| ```SSH_USER``` | - | User name |
+| ```SSH_PASSWORD``` | - | User password |
+| ```SSH_HOST``` | - | Remote host |
+| ```SSH_PORT``` | - | Remote host port |
+| ```SSH_IDENTITY_FILE``` | - | Identity file to be used |
+
+## GitLab Runner Docker Options
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| ```DOCKER_IMAGE``` | docker:latest | Docker image to be used |
