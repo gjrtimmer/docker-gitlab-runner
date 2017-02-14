@@ -1,6 +1,10 @@
 #!/usr/bin/with-contenv bash
 set -e
 
+RUNNER_EXECUTOR=${RUNNER_EXECUTOR:-shell}
+RUNNER_DESCRIPTION=${RUNNER_DESCRIPTION:-gitlab-runner}
+RUNNER_DOCKER_IMAGE=${RUNNER_DOCKER_IMAGE:-docker:latest}
+
 if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 	if [[ -n ${CI_SERVER_URL} && -n ${RUNNER_TOKEN} && -n ${RUNNER_DESCRIPTION} && -n ${RUNNER_EXECUTOR} ]]; then
 		if [[ "${RUNNER_EXECUTOR}" == "docker" ]];then
