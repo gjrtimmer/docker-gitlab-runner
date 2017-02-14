@@ -34,6 +34,7 @@ RUN echo 'http://nl.alpinelinux.org/alpine/v3.4/community'  >> /etc/apk/reposito
 	
 	wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
 	chmod +x /usr/bin/docker-machine && \
+	chmod g+x /etc && \
 	
 	pip install --upgrade pip && \
 	pip install docker-compose
