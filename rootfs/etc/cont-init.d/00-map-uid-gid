@@ -1,33 +1,6 @@
 #!/usr/bin/with-contenv bash
 set -e 
 
-# MAP UID/GID
-#GR_UID=${GR_UID:-gitlab-runner}
-#GR_GID=${GR_GID:users}
-
-# Check if provided UID by user is numerical
-#if [[ $GR_UID != *[[:digit:]]* ]]; then
-#	GR_UID=$(id -u $GR_UID)
-#fi
-
-# Check if provided GID by user is numerical
-#if [[ $GR_GID != *[[:digit:]]* ]]; then
-#	GR_GID=$(id -g $GR_GID)
-#fi
-
-# Get original
-#GR_UID_ORIG=$(id -u gitlab-runner)
-#GR_GID_ORIG=$(id -g gitlab-runner)
-
-#GR_GID=${GR_GID:-${GR_UID:-$GR_GID_ORIG}}
-#GR_UID=${GR_UID:-$GR_UID_ORIG}
-
-# Alter UID/GID if requested
-#if [[ ${GR_UID} != ${GR_UID_ORIG} ]] || [[ ${GR_GID} != ${GR_GID_ORIG} ]]; then
-#	echo "  Adapting uid and gid for gitlab-runner:users to ${GR_UID}:${GR_GID}"
-#	groupmod -o -g ${GR_GID} users
-#	sed -i -e "s|:${GR_UID_ORIG}:${GR_GID}:|:${GR_UID}:${GR_GID}:|" /etc/passwd
-#	find ${GITLAB_RUNNER_HOME} -path ${GITLAB_RUNNER_DATA}/\* -prune -o -print0 | xargs -0 chown -h gitlab-runner:
-#fi
+chmod 0775 -R /data
 
 # EOF
