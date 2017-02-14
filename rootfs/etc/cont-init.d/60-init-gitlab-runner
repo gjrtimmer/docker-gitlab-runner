@@ -21,7 +21,7 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 		echo "Missing Required environment variable"
 	fi
 else
-	gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml
+	gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml
 fi
 
 # EOF
