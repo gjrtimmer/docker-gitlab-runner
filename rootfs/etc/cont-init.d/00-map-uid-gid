@@ -30,7 +30,4 @@ set -e
 #	find ${GITLAB_RUNNER_HOME} -path ${GITLAB_RUNNER_DATA}/\* -prune -o -print0 | xargs -0 chown -h gitlab-runner:
 #fi
 
-# Fix /etc
-chmod g+x /etc
-
 # EOF

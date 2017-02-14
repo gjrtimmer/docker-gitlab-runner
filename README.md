@@ -67,12 +67,6 @@ docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitla
  
 # Configuration
 
-## General Options
-| Variable | Default | Description |
-|----------|---------|-------------|
-| ```GR_UID``` | - | GitLab Runner UID |
-| ```GR_GID``` | - | GitLab Runner GID |
-
 ## Gitlab Runner Options
 
 | Variable | Default | Description |
