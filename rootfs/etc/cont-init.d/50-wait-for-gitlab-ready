@@ -1,13 +1,13 @@
 #!/usr/bin/with-contenv bash
 set -e
 
-echo -n "  Waiting for GitLab to be READY"
+echo -n "  Waiting for GitLab"
 timeout=360
 while [ $(curl -I -sL -w '%{http_code}\n' "${CI_SERVER_URL}" -o /dev/null) -ne 200 ]
 do
 	timeout=$(expr $timeout - 5)
 	if [[ $timeout -eq 0 ]]; then
-		echo " [TIMEOUT"
+		echo " [TIMEOUT]"
 		exit 1
 	fi
 	echo -n "."
