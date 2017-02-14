@@ -12,7 +12,7 @@ if [ -S /var/run/docker.sock ]; then
 		groupadd -g ${DOCKER_SOCKET_GID} ${DOCKER_SOCKET_GROUP}
 	fi
 	
-	usermod -a -G ${DOCKER_SOCKET_GROUP} gitlab-runner
+	#usermod -a -G ${DOCKER_SOCKET_GROUP} gitlab-runner
 	echo " [DONE]"
 fi
 
