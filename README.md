@@ -81,7 +81,7 @@ docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitla
 | ```CI_SERVER_URL``` | - | CI URL; example: gitlab.com/ci |
 | ```REGISTRATION_TOKEN``` | - | Gitlab Runner token |
 | ```RUNNER_EXECUTOR``` | shell | Runner executor |
-| ```RUNNER_NAME``` | gitlab-runner | Description of runner |
+| ```RUNNER_NAME``` | gitlab-runner | Runner name |
 | ```RUNNER_TAG_LIST``` | - | Runner Tag list |
 | ```RUNNER_PRE_CLONE_SCRIPT``` | - | Runner-specific command script executed before code is pulled |
 | ```RUNNER_PRE_BUILD_SCRIPT``` | - | Runner-specific command script executed after code is pulled, just before build executes |

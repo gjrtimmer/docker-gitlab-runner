@@ -17,9 +17,7 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 		fi
 		
 		# Run gitlab-runner in system-mode
-		echo "SO FAR SO GOOD"
 		gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml ${RUNNER_DOCKER_ARGS}
-		echo ">>> $?"
 	else
 		echo "Missing Required Parameter"
 	fi

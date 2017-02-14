@@ -34,12 +34,14 @@ RUN echo 'http://nl.alpinelinux.org/alpine/v3.4/community'  >> /etc/apk/reposito
 		openssl \
 		docker=${DOCKER_ENGINE_VERSION} \
 		py2-pip && \
+		sync && \
 	
 	wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
 	chmod +x /usr/bin/docker-machine && \
 	
 	pip install --upgrade pip && \
-	pip install docker-compose
+	pip install docker-compose && \
+	sync
 	
 RUN wget -O /usr/bin/gitlab-ci-multi-runner https://gitlab-ci-multi-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-ci-multi-runner-linux-amd64 && \
 	chmod +x /usr/bin/gitlab-ci-multi-runner && \
