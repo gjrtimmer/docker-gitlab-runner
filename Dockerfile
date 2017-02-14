@@ -43,6 +43,9 @@ RUN wget -O /usr/bin/gitlab-ci-multi-runner https://gitlab-ci-multi-runner-downl
 	chmod +x /usr/bin/gitlab-ci-multi-runner && \
 	ln -s /usr/bin/gitlab-ci-multi-runner /usr/bin/gitlab-runner && \
 	
+	# Set Bash as default shell for root
+	sed "s|ash|bash|" -i /etc/passwd && \
+	
 	# Link .ssh for permanent storage
 	ln -sf ${GITLAB_RUNNER_DATA}/.ssh ~/.ssh && \
 	
