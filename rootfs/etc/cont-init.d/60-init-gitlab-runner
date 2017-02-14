@@ -2,7 +2,7 @@
 set -e
 
 RUNNER_EXECUTOR=${RUNNER_EXECUTOR:-shell}
-RUNNER_DESCRIPTION=${RUNNER_DESCRIPTION:-gitlab-runner}
+RUNNER_NAME=${RUNNER_NAME:-gitlab-runner}
 RUNNER_DOCKER_ARGS=${RUNNER_DOCKER_ARGS:-}
 RUNNER_DOCKER_IMAGE=${RUNNER_DOCKER_IMAGE:-docker:latest}
 
@@ -18,14 +18,14 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 		
 		# Run gitlab-runner in system-mode
 		echo "SO FAR SO GOOD"
-		gitlab-runner register --non-interactive --url "${CI_SERVER_URL}" --registration-token "${RUNNER_TOKEN}" --name "${RUNNER_DESCRIPTION}" --executor "${RUNNER_EXECUTOR}" --config ${GITLAB_RUNNER_DATA}/config.toml ${RUNNER_DOCKER_ARGS}
+		gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml ${RUNNER_DOCKER_ARGS}
 		echo ">>> $?"
 	else
 		echo "Missing Required Parameter"
 	fi
 else
 	# Run gitlab-runner in system mode
-	gitlab-runner register --config ${GITLAB_RUNNER_DATA}/config.toml
+	gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml
 fi
 
 # EOF
