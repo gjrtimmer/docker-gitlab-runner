@@ -60,10 +60,11 @@ docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitla
  
 # Volumes
 
-| Path | Variable | Description |
-|------|----------|-------------|
-| ~ | ```GITLAB_RUNNER_HOME``` | Home Directory |
-| ~/data | ```GITLAB_RUNNER_DATA``` | Data directory, persistent volume location |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| ```GITLAB_RUNNER_HOME``` | /home/gitlab-runner | Home Directory |
+| ```GITLAB_RUNNER_DATA``` | /home/gitlab-ruunner/data | Data directory, persistent volume location |
+| ```CA_CERTIFICATES_PATH``` | ```GITLAB_RUNNER_DATA/certs/ca.crt``` | Location for CA certificate file |
  
 # Configuration
 
