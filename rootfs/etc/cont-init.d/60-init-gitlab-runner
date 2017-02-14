@@ -9,7 +9,7 @@ RUNNER_DOCKER_IMAGE=${RUNNER_DOCKER_IMAGE:-docker:latest}
 DOCKER_IMAGE=${DOCKER_IMAGE:-docker:latest}
 
 if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
-	if [[ -n ${CI_SERVER_URL} && -n ${RUNNER_TOKEN} && -n ${RUNNER_DESCRIPTION} && -n ${RUNNER_EXECUTOR} ]]; then
+	if [[ -n ${CI_SERVER_URL} && -n ${REGISTRATION_TOKEN} && -n ${RUNNER_NAME} && -n ${RUNNER_EXECUTOR} ]]; then
 		if [[ "${RUNNER_EXECUTOR}" == "docker" ]];then
 			if [[ -n ${RUNNER_DOCKER_IMAGE} ]];then
 				RUNNER_DOCKER_ARGS="--docker-image ${RUNNER_DOCKER_IMAGE}"
@@ -19,7 +19,7 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 		# Run gitlab-runner in system-mode
 		gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml ${RUNNER_DOCKER_ARGS}
 	else
-		echo "Missing Required Parameter"
+		echo "Missing Required environment variable"
 	fi
 else
 	# Run gitlab-runner in system mode
