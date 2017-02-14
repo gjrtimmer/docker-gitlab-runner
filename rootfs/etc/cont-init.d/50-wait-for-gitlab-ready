@@ -1,12 +1,13 @@
 #!/usr/bin/with-contenv bash
 set -e
 
+GITLAB_TIMEOUT=${GITLAB_TIMEOUT:-300}
+
 echo -n "  Waiting for GitLab"
-timeout=360
 while [ $(curl -I -sL -w '%{http_code}\n' "${CI_SERVER_URL}" -o /dev/null) -ne 200 ]
 do
-	timeout=$(expr $timeout - 5)
-	if [[ $timeout -eq 0 ]]; then
+	GITLAB_TIMEOUT=$(expr ${GITLAB_TIMEOUT} - 5)
+	if [[ ${GITLAB_TIMEOUT} -eq 0 ]]; then
 		echo " [TIMEOUT]"
 		exit 1
 	fi
