@@ -4,7 +4,7 @@ MAINTAINER G.J.R. Timmer <gjr.timmer@gmail.com>
 ARG BUILD_DATE
 ARG VCS_REF
 
-ARG DOCKER_ENGINE_VERSION=1.12.6-r0
+ARG DOCKER_ENGINE_VERSION=1.13.0-r0
 ARG DOCKER_MACHINE_VERSION=0.9.0
 
 ENV GITLAB_RUNNER_DATA=/data \
@@ -18,7 +18,7 @@ LABEL \
 	nl.timmertech.vcs-ref=${VCS_REF} \
 	nl.timmertech.license=MIT
 
-RUN echo 'http://nl.alpinelinux.org/alpine/v3.5/community'  >> /etc/apk/repositories && \
+RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
 	apk upgrade --update --no-cache && \
 	apk add --no-cache --update \
 		bash \
