@@ -13,7 +13,6 @@ fi
 echo -n "Setting SSH Permissions..."
 chmod 600 ${GITLAB_RUNNER_DATA}/.ssh/id_rsa ${GITLAB_RUNNER_DATA}/.ssh/id_rsa.pub
 chmod 700 ${GITLAB_RUNNER_DATA}/.ssh
-#chown -R gitlab-runner:users ${GITLAB_RUNNER_DATA}/.ssh/
 echo " [DONE]"
 
 echo -n "Your SSH deploy key is: "

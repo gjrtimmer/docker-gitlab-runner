@@ -51,11 +51,7 @@ RUN wget -O /usr/bin/gitlab-ci-multi-runner https://gitlab-ci-multi-runner-downl
 	ln -sf ${GITLAB_RUNNER_DATA}/.ssh ~/.ssh && \
 	
 	# Link .docker for permanent storage for Docker Logins Private repositories
-	ln -sf ${GITLAB_RUNNER_DATA}/.docker ~/.docker && \
-	
-	# Data directory fix
-	mkdir ${GITLAB_RUNNER_DATA} && \
-	chmod 755 ${GITLAB_RUNNER_DATA}
+	ln -sf ${GITLAB_RUNNER_DATA}/.docker ~/.docker
 
 COPY rootfs/ /
 
