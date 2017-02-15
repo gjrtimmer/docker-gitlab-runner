@@ -3,7 +3,7 @@ stages:
   - deploy
   - clean
   
-build:
+build:latest:
   stage: build
   tags: 
     - shell
@@ -12,7 +12,7 @@ build:
   script:
     - docker build --pull --force-rm=true --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --tag=$(cat REPOSITORY)/${CI_PROJECT_PATH} .
 
-build-branches:
+build:branches:
   stage: build
   tags: 
     - shell
@@ -21,7 +21,7 @@ build-branches:
   script:
     - docker build --pull --force-rm=true --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --tag=$(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME} .
     
-deploy:
+deploy:latest:
   stage: deploy
   tags:
     - shell
@@ -30,7 +30,7 @@ deploy:
   script:
     - docker push $(cat REPOSITORY)/${CI_PROJECT_PATH}
 
-deploy-branches:
+deploy:branches:
   stage: deploy
   tags:
     - shell
@@ -39,10 +39,24 @@ deploy-branches:
   script:
     - docker push $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}
     
-clean:
+clean:latest:
   stage: clean
   tags:
     - shell
+  only:
+    - master
   script:
-    - 'if [ ! -z $(docker images -q $(cat REPOSITORY)/${CI_PROJECT_PATH}) ]; then echo "Removing: $(cat REPOSITORY)/${CI_PROJECT_PATH}"; docker rmi $(cat REPOSITORY)/${CI_PROJECT_PATH}; fi'
-    - 'if [ ! -z $(docker images -q $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}) ]; then echo "Removing: $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}"; docker rmi $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}; fi'
+    -   if [ ! -z $(docker images -q $(cat REPOSITORY)/${CI_PROJECT_PATH}) ]; then 
+            docker rmi $(cat REPOSITORY)/${CI_PROJECT_PATH};
+        fi
+
+clean:branches:
+  stage: clean
+  tags:
+    - shell
+  except:
+    - master
+  script:
+    -   if [ ! -z $(docker images -q $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}) ]; then 
+            docker rmi $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME};
+        fi
