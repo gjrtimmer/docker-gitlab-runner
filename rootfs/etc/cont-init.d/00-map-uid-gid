@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+set -e 
+
+chmod 0775 -R /data
+
+# EOF
