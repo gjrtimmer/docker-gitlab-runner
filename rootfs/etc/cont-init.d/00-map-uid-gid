@@ -1,7 +1,0 @@
-#!/usr/bin/with-contenv bash
-set -e 
-
-chown root:root -R /data
-chmod 755 -R /data
-
-# EOF
