@@ -39,16 +39,6 @@ deploy-branches:
   script:
     - docker push $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}
     
-release:
-  stage: deploy
-  tags: 
-    - shell
-  only:
-    - tags
-  script:
-    - docker tag $(cat REPOSITORY)/${CI_PROJECT_PATH} $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}
-    - docker push $(cat REPOSITORY)/${CI_PROJECT_PATH}:${CI_BUILD_REF_NAME}
-    
 clean:
   stage: clean
   tags:
