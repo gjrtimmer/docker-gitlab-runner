@@ -1,6 +1,6 @@
 stages:
   - build
-  - triggers
+  - dockerhub
 
 docker:latest:
   stage: build
@@ -27,7 +27,7 @@ docker:release:
     - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}
 
 dockerhub:latest:
-  stage: triggers
+  stage: dockerhub
   except:
     - tags
   before_script:
