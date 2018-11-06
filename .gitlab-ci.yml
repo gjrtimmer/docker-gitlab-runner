@@ -1,3 +1,7 @@
+stages:
+  - build
+  - triggers
+
 docker:latest:
   stage: build
   only: 
@@ -21,3 +25,13 @@ docker:release:
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
         --tag=${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME} .
     - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}
+
+dockerhub:latest:
+  stage: triggers
+  except:
+    - tags
+  before_script:
+    - apk add --update --no-cache curl
+  script:
+    - curl -s -H 'Content-Type:application/json' --data '{"build":true}' -X POST https://registry.hub.docker.com/u/datacore/alpine-redis/trigger/f8075820-9599-48df-804f-e33b5f520ad2/
+  when: manual
