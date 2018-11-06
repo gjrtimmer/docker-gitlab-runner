@@ -9,37 +9,46 @@
 - [Docker Registries](#docker-registries)
 - [Source Repositories](#source-repositories)
 - [Installation](#installation)
-  - [DockerHub](#install-from-dockerhub)
-  - [TimmerTech](#install-from-timmertech)
 - [Components](#components)
+- [Volumes](#volumes)
+- [Configuration](#configuration)
+  - [Gitlab Runner Options](#gitlab-runner-options)
+  - [GitLab Runner SSH Options](#gitLab-runner-ssh-options)
+  - [GitLab Runner Docker Options](#gitLab-runner-docker-options)
 
 # Docker Registries
 
- - ```datacore/gitlab-runner:latest``` (DockerHub)
- - ```registry.timmertech.nl/docker/gitlab-runner:latest``` (registry.timmertech.nl)
-
+ - ```datacore/gitlab-runner:latest```
+ - ```registry.timmertech.nl/docker/gitlab-runner:latest```
 
 # Source Repositories
 
 - [github.com](https://github.com/GJRTimmer/docker-gitlab-runner)
 - [gitlab.timmertech.nl](https://gitlab.timmertech.nl/docker/gitlab-runner)
 
-
 # Installation
 
-## Install from DockerHub
+<details>
+<summary>Install from DockerHub</summary>
+<p>
+
 Download:
 ```bash
-docker pull datacore/gitlab-runner:latest
+docker pull datacore/alpine-base:latest
 ```
 
 Build:
 ```bash
-docker build -t datacore/gitlab-runner https://github.com/GJRTimmer/docker-gitlab-runner
+docker build -t datacore/alpine-base https://github.com/GJRTimmer/docker-alpine-base
 ```
+</p>
+</details>
 
+<br/>
 
-## Install from timmertech
+<details>
+<summary>Install from TimmerTech</summary>
+<p>
 
 Download:
 ```bash
@@ -50,6 +59,8 @@ Build:
 ```bash
 docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitlab-runner
 ```
+</p>
+</details>
 
 # Components
 

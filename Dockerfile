@@ -1,57 +1,61 @@
 FROM registry.timmertech.nl/docker/alpine-glibc:latest
-MAINTAINER G.J.R. Timmer <gjr.timmer@gmail.com>
 
 ARG BUILD_DATE
 ARG VCS_REF
+ARG DOCKER_ENGINE=18.06.1-r0
+ARG DOCKER_MACHINE=0.15.0
+ARG START_TIMEOUT=300000
 
-ENV DOCKER_ENGINE_VERSION=18.03.1-r0
-ENV DOCKER_MACHINE_VERSION=0.14.0
+LABEL \
+    maintainer="G.J.R. Timmer <gjr.timmer@gmail.com>" \
+    org.label-schema.schema-version="1.0" \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.name=gitlab-runner \
+    org.label-schema.vendor=timmertech.nl \
+    org.label-schema.url="https://gitlab.timmertech.nl/docker/gitlab-runner" \
+    org.label-schema.vcs-url="https://gitlab.timmertech.nl/docker/gitlab-runner.git" \
+    org.label-schema.vcs-ref=${VCS_REF} \
+    nl.timmertech.license=MIT
+
+ENV DOCKER_ENGINE_VERSION=${DOCKER_ENGINE}
+ENV DOCKER_MACHINE_VERSION=${DOCKER_MACHINE}
 
 ENV GITLAB_RUNNER_DATA=/data \
-	S6_KILL_FINISH_MAXTIME=300000
-	
-LABEL \
-	nl.timmertech.build-date=${BUILD_DATE} \
-	nl.timmertech.name=gitlab-runner \
-	nl.timmertech.vendor=timmertech.nl \
-	nl.timmertech.vcs-url="https://github.com/GJRTimmer/docker-gitlab-runner.git" \
-	nl.timmertech.vcs-ref=${VCS_REF} \
-	nl.timmertech.license=MIT
+    S6_KILL_FINISH_MAXTIME=${START_TIMEOUT}
 
-RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
-	apk upgrade --update --no-cache && \
-	apk add --no-cache --update \
-		bash \
-		ca-certificates \
-		wget \
-		curl \
-		git \
-		openssh \
-		gcc \
-		musl-dev \
-		openssl \
-		docker=${DOCKER_ENGINE_VERSION} \
-		py2-pip && \
-	
-	wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
-	chmod +x /usr/bin/docker-machine && \
-	chmod g+x /etc && \
-	
-	pip install --upgrade pip && \
-	pip install docker-compose
-	
-RUN wget -O /usr/bin/gitlab-ci-multi-runner https://gitlab-ci-multi-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-ci-multi-runner-linux-amd64 && \
-	chmod +x /usr/bin/gitlab-ci-multi-runner && \
-	ln -s /usr/bin/gitlab-ci-multi-runner /usr/bin/gitlab-runner && \
-	
-	# Set Bash as default shell for root
-	sed "s|ash|bash|" -i /etc/passwd && \
-	
-	# Link .ssh for permanent storage
-	ln -sf ${GITLAB_RUNNER_DATA}/.ssh ~/.ssh && \
-	
-	# Link .docker for permanent storage for Docker Logins Private repositories
-	ln -sf ${GITLAB_RUNNER_DATA}/.docker ~/.docker
+RUN echo '@community http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
+    apk upgrade --update --no-cache && \
+    apk add --no-cache --update \
+    bash \
+    ca-certificates \
+    wget \
+    curl \
+    git \
+    openssh \
+    gcc \
+    musl-dev \
+    openssl \
+    docker@community=${DOCKER_ENGINE_VERSION} \
+    py2-pip && \
+
+    wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
+    chmod +x /usr/bin/docker-machine && \
+    chmod g+x /etc && \
+
+    pip install --upgrade pip && \
+    pip install docker-compose
+
+RUN wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64 && \
+    chmod +x /usr/local/bin/gitlab-runner && \
+
+    # Set Bash as default shell for root
+    sed "s|ash|bash|" -i /etc/passwd && \
+
+    # Link .ssh for permanent storage
+    ln -sf ${GITLAB_RUNNER_DATA}/.ssh ~/.ssh && \
+
+    # Link .docker for permanent storage for Docker Logins Private repositories
+    ln -sf ${GITLAB_RUNNER_DATA}/.docker ~/.docker
 
 COPY rootfs/ /
 

@@ -2,6 +2,6 @@
 set -e
 
 # Run in system mode
-exec /usr/bin/gitlab-runner run --working-directory ${GITLAB_RUNNER_DATA} --config ${GITLAB_RUNNER_DATA}/config.toml
+exec /usr/local/bin/gitlab-runner run --working-directory ${GITLAB_RUNNER_DATA} --config ${GITLAB_RUNNER_DATA}/config.toml
 
 # EOF

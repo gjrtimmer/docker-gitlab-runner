@@ -10,7 +10,7 @@ if [[ ! -e ${GITLAB_RUNNER_DATA}/config.toml ]]; then
 	if [[ -n ${CI_SERVER_URL} && -n ${REGISTRATION_TOKEN} && -n ${RUNNER_NAME} && -n ${RUNNER_EXECUTOR} ]]; then
 		gitlab-runner register --non-interactive --config ${GITLAB_RUNNER_DATA}/config.toml
 	else
-		echo "Missing Required environment variable"
+		echo "Missing Required environment variable(s)"
 	fi
 fi
 
