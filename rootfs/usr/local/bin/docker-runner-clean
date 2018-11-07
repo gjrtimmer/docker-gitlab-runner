@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-CONTAINERS=$(docker ps -q --filter status=exited;name=runner- 2>/dev/null)
-if [ ! -z ${CONTAINERS} ]; then
-	docker rm -v ${CONTAINERS} 2>/dev/null
-fi
-
-# EOF
