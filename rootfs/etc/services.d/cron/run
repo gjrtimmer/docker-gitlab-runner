@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 set -e
 
-exec su -c crond -f
+crond -f
 
 # EOF
