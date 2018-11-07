@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker rm -v $(docker ps --filter status=exited;name=runner- -q 2>/dev/null) 2>/dev/null
+
+# EOF

@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+if [ -n "${RUNNER_CLEANUP}" ] then
+    echo '*/15  *  *  *  *    /usr/local/bin/docker-runner-clean' > /etc/crontabs/root
+fi
+
+# EOF
