@@ -33,5 +33,16 @@ dockerhub:latest:
   before_script:
     - apk add --update --no-cache curl
   script:
-    - curl -s -H 'Content-Type:application/json' --data '{"build":true}' -X POST https://registry.hub.docker.com/u/datacore/alpine-redis/trigger/f8075820-9599-48df-804f-e33b5f520ad2/
+    - curl -s -H 'Content-Type:application/json' --data '{"build":true}' -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
   when: manual
+
+dockerhub:release:
+  stage: dockerhub
+  only:
+    - tags
+  before_script:
+    - apk add --update --no-cache curl
+  script:
+    - curl -s -H 'Content-Type:application/json' --data "{\"source_type\":\"Tag\",\"source_name\":\"${CI_COMMIT_REF_NAME}\"}" -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
+  when: manual
+
