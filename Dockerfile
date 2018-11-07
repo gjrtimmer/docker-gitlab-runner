@@ -27,6 +27,7 @@ RUN echo '@community http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/a
     apk upgrade --update --no-cache && \
     apk add --no-cache --update \
     bash \
+    dcron \
     ca-certificates \
     wget \
     curl \
