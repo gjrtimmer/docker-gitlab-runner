@@ -4,14 +4,14 @@ stages:
 
 docker:latest:
   stage: build
-  only: 
+  only:
     - master
   script:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-    - docker build --pull --force-rm=true --squash 
-        --build-arg VCS_REF=`git rev-parse --short HEAD` 
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=${CI_REGISTRY}/${CI_PROJECT_PATH} .
+    - docker build --pull --force-rm=true --squash
+      --build-arg VCS_REF=`git rev-parse --short HEAD`
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+      --tag=${CI_REGISTRY}/${CI_PROJECT_PATH} .
     - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}
 
 docker:release:
@@ -20,10 +20,10 @@ docker:release:
     - tags
   script:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-    - docker build --pull --force-rm=true --squash 
-        --build-arg VCS_REF=`git rev-parse --short HEAD` 
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME} .
+    - docker build --pull --force-rm=true --squash
+      --build-arg VCS_REF=`git rev-parse --short HEAD`
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+      --tag=${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME} .
     - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}
 
 dockerhub:latest:
@@ -46,3 +46,11 @@ dockerhub:release:
     - curl -s -H 'Content-Type:application/json' --data "{\"source_type\":\"Tag\",\"source_name\":\"${CI_COMMIT_REF_NAME}\"}" -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
   when: manual
 
+dockerhub:schedule:
+  stage: dockerhub
+  only:
+    - schedules
+  before_script:
+    - apk add --update --no-cache curl
+  script:
+    - curl -s -H 'Content-Type:application/json' --data '{"build":true}' -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
