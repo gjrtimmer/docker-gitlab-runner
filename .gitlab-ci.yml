@@ -59,6 +59,7 @@ dockerhub:latest:
     - tags
   script:
     - curl -s -H 'Content-Type:application/json' --data '{"build":true}' -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
+  when: manual
 
 dockerhub:release:
   stage: dockerhub
@@ -66,3 +67,4 @@ dockerhub:release:
     - tags
   script:
     - curl -s -H 'Content-Type:application/json' --data "{\"source_type\":\"Tag\",\"source_name\":\"${CI_COMMIT_REF_NAME}\"}" -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
+  when: manual
