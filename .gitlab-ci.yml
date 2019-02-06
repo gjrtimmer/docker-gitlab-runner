@@ -14,14 +14,31 @@ stages:
         --build-arg VCS_REF=`git rev-parse --short HEAD` 
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
         --tag=${DOCKER_IMAGE} .
+    
+.docker-push: &docker-push
+  script:
     - docker push ${DOCKER_IMAGE}
 
 docker:latest:
   stage: build
   only:
     - master
+    - tags
   variables:
     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
+  <<: *docker-login
+  <<: *docker-build
+  <<: *docker-push
+
+docker:branches:
+  stage: build
+  only:
+    - branches
+  except:
+    - master
+    - tags
+  variables:
+    DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}
   <<: *docker-login
   <<: *docker-build
 
