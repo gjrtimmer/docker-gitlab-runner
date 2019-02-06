@@ -16,14 +16,13 @@ stages:
         --tag=${DOCKER_IMAGE} .
     
 .docker-push: &docker-push
-  script:
+  after_script:
     - docker push ${DOCKER_IMAGE}
 
 docker:latest:
   stage: build
   only:
     - master
-    - tags
   variables:
     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
   <<: *docker-login
@@ -42,9 +41,28 @@ docker:branches:
   <<: *docker-login
   <<: *docker-build
 
+docker:release:
+  stage: build
+  only:
+    - tags
+  variables:
+    DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}
+  <<: *docker-login
+  <<: *docker-build
+  <<: *docker-push
+
 dockerhub:latest:
   stage: dockerhub
   only:
     - master
+  except:
+    - tags
   script:
     - curl -s -H 'Content-Type:application/json' --data '{"build":true}' -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
+
+dockerhub:release:
+  stage: dockerhub
+  only:
+    - tags
+  script:
+    - curl -s -H 'Content-Type:application/json' --data "{\"source_type\":\"Tag\",\"source_name\":\"${CI_COMMIT_REF_NAME}\"}" -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
