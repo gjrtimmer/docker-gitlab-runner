@@ -1,3 +1,5 @@
+image: registry.timmertech.nl/docker/docker:latest
+
 stages:
   - build
   - dockerhub
@@ -25,9 +27,7 @@ docker:latest:
 
 dockerhub:latest:
   stage: dockerhub
-  except:
-    - tags
-  before_script:
-    - apk add --update --no-cache curl
+  only:
+    - master
   script:
     - curl -s -H 'Content-Type:application/json' --data '{"build":true}' -X POST https://registry.hub.docker.com/u/datacore/gitlab-runner/trigger/${DOCKERHUB_TOKEN}/ > /dev/null
