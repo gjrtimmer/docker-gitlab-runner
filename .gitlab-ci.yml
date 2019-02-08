@@ -55,6 +55,7 @@ dockerhub:latest:
   stage: dockerhub
   only:
     - master
+    - schedules
   except:
     - tags
   script:
