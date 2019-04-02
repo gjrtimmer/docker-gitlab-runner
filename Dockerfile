@@ -2,8 +2,6 @@ FROM registry.timmertech.nl/docker/alpine-glibc:latest
 
 ARG BUILD_DATE
 ARG VCS_REF
-ARG DOCKER_ENGINE=18.09.1-r0
-ARG DOCKER_MACHINE=0.16.1
 ARG START_TIMEOUT=300000
 
 LABEL \
@@ -17,13 +15,17 @@ LABEL \
     org.label-schema.vcs-ref=${VCS_REF} \
     nl.timmertech.license=MIT
 
-ENV DOCKER_ENGINE_VERSION=${DOCKER_ENGINE} \
-    DOCKER_MACHINE_VERSION=${DOCKER_MACHINE} \
-    GITLAB_RUNNER_DATA=/data \
+ENV GITLAB_RUNNER_DATA=/data \
     S6_KILL_FINISH_MAXTIME=${START_TIMEOUT}
 
-RUN echo '@community http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
+RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
     apk upgrade --update --no-cache && \
+    apk add --no-cache --update --virtual libs \
+    build-base \
+    musl-dev \
+    libffi-dev \
+    python3-dev \
+    openssl-dev && \
     apk add --no-cache --update \
     bash \
     ca-certificates \
@@ -31,13 +33,12 @@ RUN echo '@community http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/a
     curl \
     git \
     openssh \
-    gcc \
-    musl-dev \
     openssl \
-    docker@community=${DOCKER_ENGINE_VERSION} \
-    py2-pip && \
-    wget -q https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-Linux-x86_64 -O /usr/bin/docker-machine && \
-    chmod +x /usr/bin/docker-machine && \
+    docker \
+    python3 \
+    py3-pip && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
     chmod g+x /etc && \
     pip install --upgrade pip && \
     pip install docker-compose && \
@@ -48,7 +49,8 @@ RUN echo '@community http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/a
     # Link .ssh for permanent storage
     ln -sf ${GITLAB_RUNNER_DATA}/.ssh ~/.ssh && \
     # Link .docker for permanent storage for Docker Logins Private repositories
-    ln -sf ${GITLAB_RUNNER_DATA}/.docker ~/.docker
+    ln -sf ${GITLAB_RUNNER_DATA}/.docker ~/.docker && \
+    apk del libs
 
 COPY rootfs/ /
 
