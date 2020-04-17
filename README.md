@@ -2,7 +2,7 @@
 [![](https://images.microbadger.com/badges/image/datacore/gitlab-runner.svg)](https://microbadger.com/images/datacore/gitlab-runner)
 [![](https://images.microbadger.com/badges/license/datacore/gitlab-runner.svg)](https://microbadger.com/images/datacore/gitlab-runner)
 
-## Alpine Linux Gitlab Runner
+### ***NOTE: While the repository is not updated, the docker image is auto updated every week with the latest version of the Gitlab Runner***
 
 - [Docker Registries](#docker-registries)
 - [Source Repositories](#source-repositories)
