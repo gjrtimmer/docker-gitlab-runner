@@ -1,8 +1,8 @@
-[![build status](https://gitlab.timmertech.nl/docker/gitlab-runner/badges/master/build.svg)](https://gitlab.timmertech.nl/docker/gitlab-runner/commits/master)
+[![build status](https://gitlab.timmertech.nl/docker/gitlab-runner/badges/master/pipeline.svg)](https://gitlab.timmertech.nl/docker/gitlab-runner/commits/master)
 [![](https://images.microbadger.com/badges/image/datacore/gitlab-runner.svg)](https://microbadger.com/images/datacore/gitlab-runner)
 [![](https://images.microbadger.com/badges/license/datacore/gitlab-runner.svg)](https://microbadger.com/images/datacore/gitlab-runner)
 
-# Alpine Linux Gitlab Runner
+## Alpine Linux Gitlab Runner
 
 - [Docker Registries](#docker-registries)
 - [Source Repositories](#source-repositories)
@@ -11,8 +11,8 @@
 - [Volumes](#volumes)
 - [Configuration](#configuration)
   - [Gitlab Runner Options](#gitlab-runner-options)
-  - [GitLab Runner SSH Options](#gitLab-runner-ssh-options)
-  - [GitLab Runner Docker Options](#gitLab-runner-docker-options)
+  - [GitLab Runner SSH Options](#gitlab-runner-ssh-options)
+  - [GitLab Runner Docker Options](#gitlab-runner-docker-options)
 
 # Docker Registries
 
@@ -21,7 +21,7 @@
 
 # Source Repositories
 
-- [github.com](https://github.com/GJRTimmer/docker-gitlab-runner)
+- [github.com](https://github.com/gjrtimmer/docker-gitlab-runner)
 - [gitlab.timmertech.nl](https://gitlab.timmertech.nl/docker/gitlab-runner)
 
 # Installation
@@ -39,7 +39,7 @@ docker pull datacore/alpine-base:latest
 Build:
 
 ```bash
-docker build -t datacore/alpine-base https://github.com/GJRTimmer/docker-alpine-base
+docker build -t datacore/alpine-base https://github.com/gjrtimmer/docker-alpine-base
 ```
 
 </p>
