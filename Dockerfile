@@ -32,6 +32,7 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/reposito
     wget \
     curl \
     git \
+    git-lfs \
     openssh \
     openssl \
     docker \
