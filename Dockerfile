@@ -21,12 +21,12 @@ ENV GITLAB_RUNNER_DATA=/data \
 RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
     apk upgrade --update --no-cache && \
     apk add --no-cache --update --virtual libs \
-    build-base \
     musl-dev \
     libffi-dev \
     python3-dev \
     openssl-dev && \
     apk add --no-cache --update \
+    build-base \
     bash \
     ca-certificates \
     wget \
