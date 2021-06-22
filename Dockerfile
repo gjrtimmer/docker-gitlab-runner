@@ -23,7 +23,6 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/reposito
     apk add --no-cache --update --virtual libs \
         musl-dev \
         libffi-dev \
-        python3-dev \
         openssl-dev && \
         apk add --no-cache --update \
         build-base \
@@ -36,14 +35,9 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/reposito
         openssh \
         openssl \
         docker \
-        python3 \
-        shadow \
-        py3-pip && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
-    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+        docker-compose \
+        shadow && \
     chmod g+x /etc && \
-    pip install --upgrade pip && \
-    pip install docker-compose && \
     wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64 && \
     chmod +x /usr/local/bin/gitlab-runner && \
     # Set Bash as default shell for root
