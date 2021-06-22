@@ -21,23 +21,24 @@ ENV GITLAB_RUNNER_DATA=/data \
 RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
     apk upgrade --update --no-cache && \
     apk add --no-cache --update --virtual libs \
-    musl-dev \
-    libffi-dev \
-    python3-dev \
-    openssl-dev && \
-    apk add --no-cache --update \
-    build-base \
-    bash \
-    ca-certificates \
-    wget \
-    curl \
-    git \
-    git-lfs \
-    openssh \
-    openssl \
-    docker \
-    python3 \
-    py3-pip && \
+        musl-dev \
+        libffi-dev \
+        python3-dev \
+        openssl-dev && \
+        apk add --no-cache --update \
+        build-base \
+        bash \
+        ca-certificates \
+        wget \
+        curl \
+        git \
+        git-lfs \
+        openssh \
+        openssl \
+        docker \
+        python3 \
+        shadow \
+        py3-pip && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
     if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
     chmod g+x /etc && \
