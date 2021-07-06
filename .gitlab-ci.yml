@@ -2,6 +2,7 @@ image: registry.timmertech.nl/docker/docker:latest
 
 
 stages:
+  - verify
   - build
   - trigger
 
@@ -16,7 +17,9 @@ variables:
 ################################################################################
 .build:
   stage: build
+  interruptible: true
   variables:
+    PROXY: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/
     DOCKER_FILE: Dockerfile
     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
   before_script:
@@ -36,6 +39,27 @@ variables:
 ################################################################################
 # Job Configuration
 ################################################################################
+# Verify Bash Scripting
+shellcheck:
+  stage: verify
+  image: ${CI_REGISTRY}/docker/shellcheck:latest
+  interruptible: true
+  cache: {}
+  needs: []
+  only:
+    refs:
+      - master
+      - branches
+    changes:
+      - hooks/*
+      - root/*
+  before_script:
+    - shellcheck --version
+  script:
+    - shellcheck $(find hooks/ -type f)
+    - shellcheck $(find root/ -type f)
+
+
 update:
   stage: build
   extends: .build
@@ -46,6 +70,7 @@ update:
 
 docker.hub:
   stage: trigger
+  interruptible: true
   only:
     - schedules
   script:

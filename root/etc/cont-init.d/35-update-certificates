@@ -1,0 +1,27 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash disable=SC1008
+
+# Define CA certificates location
+CA_CERTIFICATES=${CA_CERTIFICATES:-/config/certs}
+if [ -e "${CA_CERTIFICATES}" ]; then
+	echo "linking certificate $(basename "${CA_CERTIFICATES}")"
+	ln -sf "${CA_CERTIFICATES}" "/usr/local/share/ca-certificates/$(basename "${CA_CERTIFICATES}")"
+fi
+
+# Perform removal of non existent certificate links
+# this might occur when user decides to update the certificates
+# or when the user decides to mount a certificates volume
+#
+# always check if previously created certificate links
+# must be removed when the container restarts/recreated
+for ELM in /usr/local/share/ca-certificates/*; do
+	if [ ! -e "${ELM}" ]; then
+		# Entries should always be symlinks because of previous function
+		rm "${ELM}"
+	fi
+done
+
+echo "updating certificates"
+update-ca-certificates --fresh > /dev/null 2>&1 || true
+
+# EOF

@@ -1,0 +1,17 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash disable=SC1008
+
+WAIT_INET_ADDR=${WAIT_INET_ADDR:-${CI_SERVER_URL:-https://www.linuxserver.io/}}
+
+# Loop until an active internet connection is established
+until curl --max-time 60 -s -o /dev/null "${WAIT_INET_ADDR}"; do
+  # Sleep to allow cooldown
+  sleep 10
+done
+
+# Export WAIT_INET_ADDR to environment
+# we need this when we are going to wait in the check to see
+# if gitlab is ready
+printf '%s' "${WAIT_INET_ADDR}" > /var/run/s6/container_environment/WAIT_INET_ADDR
+
+# EOF

@@ -1,3 +1,5 @@
+FROM ${PROXY}linuxserver/docker-compose:amd64-latest as compose-amd64
+
 FROM registry.timmertech.nl/docker/alpine-glibc:latest
 
 RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
@@ -18,6 +20,8 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/reposito
     chmod +x /usr/local/bin/gitlab-runner && \
     sed "s|ash|bash|" -i /etc/passwd
 
+COPY --from=compose-amd64 /usr/local/bin/docker-compose /docker-compose/docker-compose_x86_64
+COPY --from=compose-amd64 /usr/local/bin/docker /docker-compose/docker_x86_64
 COPY root/ /
 
 ARG BUILD_DATE
@@ -27,11 +31,11 @@ ARG VCS_REF
 ARG DOCKER_IMAGE
 ARG START_TIMEOUT=300000
 
-ENV GITLAB_RUNNER_DATA=/data \
-    S6_KILL_FINISH_MAXTIME=${START_TIMEOUT}
+ENV S6_KILL_FINISH_MAXTIME=${START_TIMEOUT} \
+    HOME=/config
 
 # Volume mapping
-VOLUME [ "${GITLAB_RUNNER_DATA}" ]
+VOLUME [ "/config" ]
 
 LABEL \
     maintainer="G.J.R. Timmer <gjr.timmer@gmail.com>" \
