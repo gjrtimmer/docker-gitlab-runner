@@ -1,0 +1,14 @@
+{
+    "files.defaultLanguage": "shellscript",
+    "files.associations": {
+        "untitled-*": "shellscript",
+        "**/root/[!.]": "shellscript",
+        "**/hooks/[!.]": "shellscript"
+    },
+    "[shellscript]": {
+        "files.eol": "\n",
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+    },
+
+}

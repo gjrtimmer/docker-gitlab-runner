@@ -1,12 +1,18 @@
 [![build status](https://gitlab.timmertech.nl/docker/gitlab-runner/badges/master/pipeline.svg)](https://gitlab.timmertech.nl/docker/gitlab-runner/commits/master)
-[![](https://images.microbadger.com/badges/image/datacore/gitlab-runner.svg)](https://microbadger.com/images/datacore/gitlab-runner)
-[![](https://images.microbadger.com/badges/license/datacore/gitlab-runner.svg)](https://microbadger.com/images/datacore/gitlab-runner)
 
-### ***NOTE: While the repository is not updated, the docker image is auto updated every week with the latest version of the Gitlab Runner***
+# gitlab-runner
 
-- [Docker Registries](#docker-registries)
+> ## **Auto Update**
+>
+> Auto Update
+> This image will be automatically updated every week.
+>
+> The current ubuntu version is written to the container label org.label-schema.ubuntu-version
+
 - [Source Repositories](#source-repositories)
 - [Installation](#installation)
+  - [Download](#download)
+  - [Build](#build)
 - [Components](#components)
 - [Volumes](#volumes)
 - [Configuration](#configuration)
@@ -14,75 +20,41 @@
   - [GitLab Runner SSH Options](#gitlab-runner-ssh-options)
   - [GitLab Runner Docker Options](#gitlab-runner-docker-options)
 
-# Docker Registries
-
-- `datacore/gitlab-runner:latest`
-- `registry.timmertech.nl/docker/gitlab-runner:latest`
-
-# Source Repositories
+## Source Repositories
 
 - [github.com](https://github.com/gjrtimmer/docker-gitlab-runner)
-- [gitlab.timmertech.nl](https://gitlab.timmertech.nl/docker/gitlab-runner)
 
-# Installation
+## Installation
 
-<details>
-<summary>Install from DockerHub</summary>
-<p>
-
-Download:
+### Download
 
 ```bash
-docker pull datacore/alpine-base:latest
+docker pull gjrtimmer/gitlab-runner:latest
 ```
 
-Build:
+### Build
 
 ```bash
-docker build -t datacore/alpine-base https://github.com/gjrtimmer/docker-alpine-base
+docker build -t gjrtimmer/gitlab-runner https://github.com/gjrtimmer/docker-gitlab-runner
 ```
 
-</p>
-</details>
 
-<br/>
-
-<details>
-<summary>Install from TimmerTech</summary>
-<p>
-
-Download:
-
-```bash
-docker pull registry.timmertech.nl/docker/gitlab-runner:latest
-```
-
-Build:
-
-```bash
-docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitlab-runner
-```
-
-</p>
-</details>
-
-# Components
+## Components
 
 - gitlab-runner
-- docker-engine
+- docker-cli
 - docker-compose
-- docker-machine
 
-# Volumes
+## Volumes
 
 | Variable               | Default                           | Description                                |
 | ---------------------- | --------------------------------- | ------------------------------------------ |
 | `DATA`                 | /data                             | Data directory, persistent volume location |
 | `CA_CERTIFICATES_PATH` | `GITLAB_RUNNER_DATA/certs/ca.crt` | Location for CA certificate file           |
 
-# Configuration
+## Configuration
 
-## Gitlab Runner Options
+### Gitlab Runner Options
 
 | Variable                  | Default       | Description                                                                              |
 | ------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
@@ -95,7 +67,7 @@ docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitla
 | `RUNNER_PRE_BUILD_SCRIPT` | -             | Runner-specific command script executed after code is pulled, just before build executes |
 | `RUNNER_DOCKER_IMAGE`     | docker:latest | Default docker image ton use if executor is docker                                       |
 
-## GitLab Runner SSH Options
+### GitLab Runner SSH Options
 
 | Variable            | Default | Description              |
 | ------------------- | ------- | ------------------------ |
@@ -105,7 +77,7 @@ docker build -t datacore/gitlab-runner https://gitlab.timmertech.nl/docker/gitla
 | `SSH_PORT`          | -       | Remote host port         |
 | `SSH_IDENTITY_FILE` | -       | Identity file to be used |
 
-## GitLab Runner Docker Options
+### GitLab Runner Docker Options
 
 | Variable       | Default       | Description             |
 | -------------- | ------------- | ----------------------- |

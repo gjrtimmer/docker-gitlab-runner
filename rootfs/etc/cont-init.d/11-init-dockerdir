@@ -1,6 +1,0 @@
-#!/usr/bin/with-contenv bash
-set -e
-
-mkdir -p ${GITLAB_RUNNER_DATA}/.docker/
-
-# EOF

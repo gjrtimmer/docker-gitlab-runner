@@ -1,8 +1,0 @@
-#!/usr/bin/with-contenv bash
-set -e
-
-if [ ! -d ${GITLAB_RUNNER_DATA} ]; then
-	mkdir -p ${GITLAB_RUNNER_DATA}
-fi
-
-# EOF

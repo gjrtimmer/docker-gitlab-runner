@@ -1,7 +1,0 @@
-#!/usr/bin/with-contenv bash
-set -e
-
-# Run in system mode
-exec /usr/local/bin/gitlab-runner run --working-directory ${GITLAB_RUNNER_DATA} --config ${GITLAB_RUNNER_DATA}/config.toml
-
-# EOF
