@@ -34,6 +34,7 @@ variables:
         --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
         --file=${DOCKER_FILE}
         --tag=${DOCKER_IMAGE} .
+    - docker push ${DOCKER_IMAGE}
 
 
 ################################################################################
