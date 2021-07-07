@@ -6,6 +6,7 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/reposito
     apk add --no-cache --update \
         build-base \
         bash \
+        findutils \
         ca-certificates \
         wget \
         curl \
