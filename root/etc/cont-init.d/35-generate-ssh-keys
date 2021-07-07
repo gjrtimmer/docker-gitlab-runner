@@ -2,18 +2,23 @@
 # shellcheck shell=bash disable=SC1008
 
 if [[ ! -e /config/.ssh/id_rsa || ! -e /config/.ssh/id_rsa.pub ]]; then
-	echo -n "  Generating SSH deploy keys..."
+	echo -n "  generating ssh deploy keys..."
 	rm -rf /config/.ssh/id_rsa /config/.ssh/id_rsa.pub
-	ssh-keygen -t rsa -N "" -f /config/.ssh/id_rsa
+	ssh-keygen -o -t rsa -N "" -f /config/.ssh/id_rsa
 	echo " [DONE]"
 fi
 
-echo -n "Setting SSH Permissions..."
+if [ -z "${SSH_KEY_COMMENT}" ]; then
+	echo "setting key comment to: ${SSH_KEY_COMMENT}"
+	ssh-keygen -f /config/.ssh/id_rsa.pub -o -c -C "${SSH_KEY_COMMENT}"
+fi
+
+echo -n "setting ssh permissions..."
 chmod 600 /config/.ssh/id_rsa /config/.ssh/id_rsa.pub
 chmod 700 /config/.ssh
 echo " [DONE]"
 
-echo -n "Your SSH deploy key is: "
+echo -n "your ssh deploy key is: "
 cat /config/.ssh/id_rsa.pub
 echo ""
 
