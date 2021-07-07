@@ -25,7 +25,7 @@ if [ -f "/usr/bin/find" ] && [ -f "/usr/bin/xargs" ]; then
     echo "setting permissions::configuration"
     CORES=$(nproc --all)
     find /config -maxdepth 4 -mindepth 1 -path /config/data -prune -false -o -type d -print0 | \
-        xargs -r --max-args=1 --max-procs=$((CORES*2*8)) \
+        xargs -0 -r --max-args=1 --max-procs=$((CORES*2*8)) \
         chown -R abc:abc
 
     BG=""
@@ -38,7 +38,7 @@ if [ -f "/usr/bin/find" ] && [ -f "/usr/bin/xargs" ]; then
 
     chown abc:abc /config/data
     find /config/data -maxdepth 4 -mindepth 1 -type d -print0 | \
-        xargs -r --max-args=1 --max-procs=$((CORES*2*16)) \
+        xargs -0 -r --max-args=1 --max-procs=$((CORES*2*16)) \
         chown -R abc:abc ${BG}
 
 else
