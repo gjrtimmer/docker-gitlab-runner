@@ -13,7 +13,7 @@ chmod 600 /config/.ssh/id_rsa /config/.ssh/id_rsa.pub
 chmod 700 /config/.ssh
 echo " [DONE]"
 
-if [ -z "${SSH_KEY_COMMENT}" ]; then
+if [ -n "${SSH_KEY_COMMENT}" ]; then
 	echo "setting key comment to: ${SSH_KEY_COMMENT}"
 	ssh-keygen -f /config/.ssh/id_rsa.pub -o -c -C "${SSH_KEY_COMMENT}"
 fi
