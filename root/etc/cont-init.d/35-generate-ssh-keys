@@ -4,7 +4,7 @@
 if [[ ! -e /config/.ssh/id_rsa || ! -e /config/.ssh/id_rsa.pub ]]; then
 	echo -n "  generating ssh deploy keys..."
 	rm -rf /config/.ssh/id_rsa /config/.ssh/id_rsa.pub
-	ssh-keygen -o -t rsa -N "" -f /config/.ssh/id_rsa
+	ssh-keygen -o -t rsa -N "" -f /config/.ssh/id_rsa > /dev/null 2>&1
 	echo " [DONE]"
 fi
 
