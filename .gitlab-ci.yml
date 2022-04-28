@@ -1,16 +1,32 @@
 image: registry.timmertech.nl/docker/docker:latest
 
-
 stages:
   - verify
   - build
-  - trigger
-
 
 variables:
-  CI: 'true'
+  CI: "true"
   DOCKER_DRIVER: overlay2
 
+################################################################################
+# Workflow
+################################################################################
+workflow:
+  rules:
+    # If $VERSION variable defined have it take precedence over the commit tag
+    - if: $VERSION
+      variables:
+        RELEASE: "${VERSION}"
+    # When the CI_COMMIT_TAG is present we are override the Gradle command
+    # and configuring the tag as the version to build
+    - if: $CI_COMMIT_TAG
+      variables:
+        RELEASE: "${CI_COMMIT_TAG}"
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
+      when: never
+    - if: "$CI_COMMIT_BRANCH"
+    - when: always
 
 ################################################################################
 # Template(s)
@@ -25,17 +41,17 @@ variables:
   before_script:
     - echo "${CI_DEPENDENCY_PROXY_PASSWORD}" | docker login -u "${CI_DEPENDENCY_PROXY_USER}" --password-stdin "${CI_DEPENDENCY_PROXY_SERVER}"
     - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
+    - echo "${DOCKERHUB_PASS}" | docker login -u ${DOCKERHUB_USER} --password-stdin ${DOCKERHUB_REGISTRY}
   script:
     - docker build --pull
-        --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
-        --build-arg CI_PROJECT_NAME=${CI_PROJECT_NAME}
-        --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
-        --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
-        --file=${DOCKER_FILE}
-        --tag=${DOCKER_IMAGE} .
+      --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+      --build-arg CI_PROJECT_NAME=${CI_PROJECT_NAME}
+      --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
+      --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
+      --file=${DOCKER_FILE}
+      --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
-
 
 ################################################################################
 # Job Configuration
@@ -60,22 +76,15 @@ shellcheck:
     - shellcheck $(find hooks/ -type f)
     - shellcheck $(find root/ -type f)
 
-
 update:
   stage: build
   extends: .build
+  variables:
+    DOCKER_IMAGE_HUB: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
   only:
     - master
     - schedules
-
-
-docker.hub:
-  stage: trigger
-  interruptible: true
-  only:
-    - schedules
-  script:
-    - curl -s -H -X POST ${DOCKERHUB_TRIGGER} > /dev/null
-
-
+  after_script:
+    - docker tag ${DOCKER_IMAGE} ${DOCKER_IMAGE_HUB}
+    - docker push ${DOCKER_IMAGE_HUB}
 # EOF
