@@ -16,8 +16,6 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/reposito
         openssl \
         docker-cli \
         docker-compose \
-        libcrypto1.1 \
-        libcrypto3 \
         shadow && \
     wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64 && \
     chmod +x /usr/local/bin/gitlab-runner && \
