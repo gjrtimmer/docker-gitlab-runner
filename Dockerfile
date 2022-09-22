@@ -37,7 +37,7 @@ ENV S6_KILL_FINISH_MAXTIME=${START_TIMEOUT} \
     HOME=/config
 
 # Volume mapping
-VOLUME [ "/config" ]
+VOLUME [ "${HOME}" ]
 
 LABEL \
     maintainer="G.J.R. Timmer <gjr.timmer@gmail.com>" \
