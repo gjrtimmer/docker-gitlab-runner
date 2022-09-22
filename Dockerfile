@@ -16,7 +16,8 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/reposito
         openssl \
         docker-cli \
         docker-compose \
-        shadow && \
+        shadow \
+        libcrypto3 && \
     wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64 && \
     chmod +x /usr/local/bin/gitlab-runner && \
     sed "s|ash|bash|" -i /etc/passwd
