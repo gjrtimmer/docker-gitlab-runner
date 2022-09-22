@@ -2,23 +2,22 @@ FROM ${PROXY}linuxserver/docker-compose:amd64-latest as compose-amd64
 
 FROM registry.timmertech.nl/docker/alpine-glibc:latest
 
-RUN echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
+RUN echo 'http://nl.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositories && \
+    echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
     apk add --no-cache --update \
-        build-base \
-        bash \
-        findutils \
-        ca-certificates \
-        wget \
-        curl \
-        git \
-        git-lfs \
-        openssh \
-        openssl \
-        docker-cli \
-        docker-compose \
-        shadow \
-        libcrypto3 \
-        libssl3 && \
+    build-base \
+    bash \
+    findutils \
+    ca-certificates \
+    wget \
+    curl \
+    git \
+    git-lfs \
+    openssh \
+    openssl \
+    docker-cli \
+    docker-compose \
+    shadow && \
     wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64 && \
     chmod +x /usr/local/bin/gitlab-runner && \
     sed "s|ash|bash|" -i /etc/passwd
