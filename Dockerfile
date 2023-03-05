@@ -4,7 +4,7 @@ FROM registry.timmertech.nl/docker/alpine-glibc:latest
 
 RUN echo 'http://nl.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositories && \
     echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
-    apk add --no-cache --update \
+    apk add --no-cache --force-overwrite --update \
     build-base \
     bash \
     findutils \
