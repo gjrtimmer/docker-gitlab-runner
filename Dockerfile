@@ -1,4 +1,4 @@
-FROM ${PROXY}linuxserver/docker-compose:amd64-latest as compose-amd64
+FROM ${DOCKER_PROXY_HOST}/linuxserver/docker-compose:amd64-latest as compose-amd64
 
 FROM registry.timmertech.nl/docker/alpine-glibc:latest
 
