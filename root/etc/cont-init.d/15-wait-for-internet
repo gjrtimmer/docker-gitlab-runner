@@ -4,7 +4,7 @@
 WAIT_INET_ADDR=${WAIT_INET_ADDR:-${CI_SERVER_URL:-https://www.linuxserver.io/}}
 
 # Loop until an active internet connection is established
-until curl --max-time 60 -s -o -k -L /dev/null "${WAIT_INET_ADDR}"; do
+until curl --max-time 60 -s -k -L -o /dev/null "${WAIT_INET_ADDR}"; do
   # Sleep to allow cooldown
   sleep 10
 done
