@@ -35,7 +35,6 @@ workflow:
   stage: build
   interruptible: true
   variables:
-    PROXY: ${DOCKER_PROXY_HOST}
     DOCKER_FILE: Dockerfile
     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
   before_script:
@@ -49,6 +48,7 @@ workflow:
       --build-arg CI_PROJECT_NAME=${CI_PROJECT_NAME}
       --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
       --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
+      --build-arg DOCKER_PROXY_HOST=${DOCKER_PROXY_HOST}
       --file=${DOCKER_FILE}
       --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
