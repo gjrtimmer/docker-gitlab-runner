@@ -3,8 +3,8 @@ FROM ${DOCKER_PROXY_HOST}/linuxserver/docker-compose:amd64-latest as compose-amd
 
 FROM registry.timmertech.nl/docker/alpine-glibc:latest
 
-RUN echo 'http://nl.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositories && \
-    echo 'http://nl.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
+RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositories && \
+    echo 'http://dl-cdn.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
     apk add --no-cache --force-overwrite --update \
     build-base \
     openssh \
