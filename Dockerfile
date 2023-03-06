@@ -21,7 +21,8 @@ RUN echo 'http://nl.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositories 
     shadow && \
     wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64 && \
     chmod +x /usr/local/bin/gitlab-runner && \
-    sed "s|ash|bash|" -i /etc/passwd
+    sed "s|ash|bash|" -i /etc/passwd && \
+    update-ca-certificates
 
 COPY --from=compose-amd64 /usr/local/bin/docker-compose /docker-compose/docker-compose_x86_64
 COPY --from=compose-amd64 /usr/local/bin/docker /docker-compose/docker_x86_64
