@@ -67,7 +67,6 @@ shellcheck:
   stage: verify
   image:
     name: ${CI_REGISTRY}/docker/shellcheck:latest
-    entrypoint: [""]
   interruptible: true
   cache: {}
   needs: []
