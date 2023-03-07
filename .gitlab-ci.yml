@@ -74,11 +74,12 @@ shellcheck:
       - master
       - branches
     changes:
-      - root/*
+      - root/**
   before_script:
     - shellcheck --version
   script:
     - shellcheck $(find root/ -type f)
+    - find root/ -type f | xargs -n 1 shellcheck --color=always
 
 build:
   stage: build
