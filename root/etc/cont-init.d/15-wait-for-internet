@@ -10,6 +10,5 @@ until curl --max-time 60 -s -k -L -o /dev/null "${WAIT_INET_ADDR}"; do
 done
 
 # Export WAIT_INET_ADDR to environment
-# we need this when we are going to wait in the check to see
-# if gitlab is ready
+# we need this when we are going to wait in the check to see if gitlab is ready
 printf '%s' "${WAIT_INET_ADDR}" > /var/run/s6/container_environment/WAIT_INET_ADDR
