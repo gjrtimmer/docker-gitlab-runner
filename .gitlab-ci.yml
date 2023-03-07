@@ -65,7 +65,9 @@ workflow:
 # Verify Bash Scripting
 shellcheck:
   stage: verify
-  image: ${CI_REGISTRY}/docker/shellcheck:latest
+  image:
+    name: ${CI_REGISTRY}/docker/shellcheck:latest
+    entrypoint: [""]
   interruptible: true
   cache: {}
   needs: []
