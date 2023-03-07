@@ -74,7 +74,7 @@ shellcheck:
       - master
       - branches
     changes:
-      - root/**
+      - root/*
   before_script:
     - shellcheck --version
   script:
