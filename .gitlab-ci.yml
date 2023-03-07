@@ -73,8 +73,6 @@ shellcheck:
     refs:
       - master
       - branches
-    changes:
-      - root/*
   before_script:
     - shellcheck --version
   script:
