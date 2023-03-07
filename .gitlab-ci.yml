@@ -74,12 +74,10 @@ shellcheck:
       - master
       - branches
     changes:
-      - hooks/*
       - root/*
   before_script:
     - shellcheck --version
   script:
-    - shellcheck $(find hooks/ -type f)
     - shellcheck $(find root/ -type f)
 
 build:
