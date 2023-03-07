@@ -74,10 +74,12 @@ shellcheck:
     refs:
       - master
       - branches
+  variables:
+    FILES: "find root/ -type f"
   before_script:
     - shellcheck --version
   script:
-    - find root/ -type f | xargs -n 1 shellcheck --color=always
+    - ${FILES} | xargs -n 1 shellcheck --color=always
 
 build:
   stage: build
