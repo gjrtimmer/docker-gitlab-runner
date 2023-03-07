@@ -23,5 +23,3 @@ done
 
 echo "updating certificates"
 update-ca-certificates --fresh > /dev/null 2>&1 || true
-
-# EOF

@@ -30,5 +30,3 @@ elif [ -n "$DOCKER_HOST" ]; then
 else
   echo "**** Please map /var/run/docker.sock for access to docker service on host. Alternatively you can manually define a remote host address with the docker cli option -H ****"
 fi
-
- #EOF

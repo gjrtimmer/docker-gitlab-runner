@@ -45,5 +45,3 @@ else
     chown -R abc:abc
         /config
 fi
-
-# EOF

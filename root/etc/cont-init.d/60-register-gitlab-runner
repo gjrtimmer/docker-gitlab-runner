@@ -18,5 +18,3 @@ if [[ ! -e /config/config.toml ]]; then
 		echo "Missing Required environment variable(s)"
 	fi
 fi
-
-# EOF

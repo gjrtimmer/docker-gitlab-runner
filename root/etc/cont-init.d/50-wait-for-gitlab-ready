@@ -45,5 +45,3 @@ until curl -I -sL -w '%{http_code}\n' --max-time 60 -o /dev/null "${CI_SERVER_UR
 	sleep 10
 done
 echo " [READY]"
-
-# EOF
