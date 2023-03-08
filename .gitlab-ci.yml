@@ -5,11 +5,11 @@ stages:
   - build
   - deploy
 
-variables:
-  CI: "true"
-  DOCKER_CONFIG: ".docker-config/"
-  DOCKER_DRIVER: overlay2
-  DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
+include:
+  - project: templates/ci
+    file: docker.yml
+  - project: templates/ci
+    file: dockerhub.yml
 
 ################################################################################
 # Workflow
@@ -36,11 +36,6 @@ workflow:
 ################################################################################
 .build:
   interruptible: true
-  variables:
-    DOCKER_FILE: Dockerfile
-  before_script:
-    - docker login ${DOCKER_PROXY_HOST}
-    - docker login ${CI_REGISTRY}
   script:
     - docker build --pull
       --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
@@ -52,13 +47,6 @@ workflow:
       --file=${DOCKER_FILE}
       --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
-
-.dockerhub:
-  before_script:
-    - echo "${DOCKERHUB_PASS}" | docker login -u ${DOCKERHUB_USER} --password-stdin ${DOCKERHUB_REGISTRY}
-  script:
-    - docker tag ${DOCKER_IMAGE} ${DOCKER_IMAGE_HUB}
-    - docker push ${DOCKER_IMAGE_HUB}
 
 ################################################################################
 # Job Configuration
