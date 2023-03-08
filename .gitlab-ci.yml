@@ -7,6 +7,7 @@ stages:
 
 variables:
   CI: "true"
+  DOCKER_CONFIG: ".docker-config/"
   DOCKER_DRIVER: overlay2
   DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
 
