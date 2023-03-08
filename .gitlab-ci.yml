@@ -38,6 +38,9 @@ workflow:
   interruptible: true
   variables:
     DOCKER_FILE: Dockerfile
+  before_script:
+    - docker login ${DOCKER_PROXY_HOST}
+    - docker login ${CI_REGISTRY}
   script:
     - docker build --pull
       --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
