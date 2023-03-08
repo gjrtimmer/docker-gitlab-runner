@@ -9,7 +9,7 @@ include:
   - project: templates/ci
     file: docker.yml
   - project: templates/ci
-    file: dockerhub.yml
+    file: docker-hub.yml
 
 ################################################################################
 # Workflow
