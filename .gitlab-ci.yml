@@ -70,34 +70,44 @@ shellcheck:
   script:
     - ${FILES} | xargs -n 1 shellcheck --color=always
 
-build:
-  stage: build
-  extends: .build
+checkversion:
+  stage: verify
+  image: registry.timmertech.nl/tools/check-version:latest
+  allow_failure: true
   only:
-    - master
-    - schedules
+    refs:
+      - master
+      - schedules
+  script:
+    - chkver -c $(cat VERSION) gitlab --project-id 250833 --sanitize
+# build:
+#   stage: build
+#   extends: .build
+#   only:
+#     - master
+#     - schedules
 
-dockerhub:
-  stage: deploy
-  extends: .dockerhub
-  variables:
-    DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
-  only:
-    - master
-    - schedules
+# dockerhub:
+#   stage: deploy
+#   extends: .dockerhub
+#   variables:
+#     DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
+#   only:
+#     - master
+#     - schedules
 
-release:
-  stage: build
-  extends: .build
-  variables:
-    DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_TAG}
-  only:
-    - tags
+# release:
+#   stage: build
+#   extends: .build
+#   variables:
+#     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_TAG}
+#   only:
+#     - tags
 
-dockerhub-release:
-  stage: deploy
-  extends: .dockerhub
-  variables:
-    DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_TAG}
-  only:
-    - tags
+# dockerhub-release:
+#   stage: deploy
+#   extends: .dockerhub
+#   variables:
+#     DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_TAG}
+#   only:
+#     - tags
