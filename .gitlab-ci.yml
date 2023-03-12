@@ -78,6 +78,7 @@ checkversion:
     refs:
       - master
       - schedules
+  before_script: []
   script:
     - chkver -c $(cat VERSION) gitlab --project-id 250833 --sanitize
 # build:
