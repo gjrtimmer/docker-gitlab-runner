@@ -64,7 +64,7 @@ shellcheck:
       - master
       - branches
     changes:
-      - "rootfs/*"
+      - rootfs/*
   variables:
     FILES: "find rootfs/ -type f"
   before_script:
