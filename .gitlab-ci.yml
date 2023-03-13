@@ -76,8 +76,11 @@ checkversion:
   stage: verify
   image: registry.timmertech.nl/tools/chkver:latest
   only:
-    - master
-    - schedules
+    variables:
+      - $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN"
+    refs:
+      - master
+      - schedules
   before_script: []
   script:
     - scripts/check-version
