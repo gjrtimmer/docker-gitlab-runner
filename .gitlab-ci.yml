@@ -44,6 +44,7 @@ workflow:
       --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
       --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
       --build-arg DOCKER_PROXY_HOST=${DOCKER_PROXY_HOST}
+      --build-arg REMOTE_VERSION=${REMOTE_VERSION}
       --file=${DOCKER_FILE}
       --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
@@ -84,34 +85,50 @@ checkversion:
   before_script: []
   script:
     - scripts/check-version
-# build:
-#   stage: build
-#   extends: .build
-#   only:
-#     - master
-#     - schedules
 
-# dockerhub:
-#   stage: deploy
-#   extends: .dockerhub
-#   variables:
-#     DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
-#   only:
-#     - master
-#     - schedules
+build:
+  stage: build
+  extends: .build
+  variables:
+    REMOTE_VERSION: ${CI_COMMIT_TAG}
+  only:
+    variables:
+      - $GITLAB_USER_NAME == "PROJECT_BOT_TOKEN"
+    refs:
+      - tags
 
-# release:
-#   stage: build
-#   extends: .build
-#   variables:
-#     DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_TAG}
-#   only:
-#     - tags
+dockerhub:
+  stage: deploy
+  extends: .dockerhub
+  variables:
+    REMOTE_VERSION: ${CI_COMMIT_TAG}
+    DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
+  only:
+    variables:
+      - $GITLAB_USER_NAME == "PROJECT_BOT_TOKEN"
+    refs:
+      - tags
 
-# dockerhub-release:
-#   stage: deploy
-#   extends: .dockerhub
-#   variables:
-#     DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_TAG}
-#   only:
-#     - tags
+release:
+  stage: build
+  extends: .build
+  variables:
+    REMOTE_VERSION: ${CI_COMMIT_TAG}
+    DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_TAG}
+  only:
+    variables:
+      - $GITLAB_USER_NAME == "PROJECT_BOT_TOKEN"
+    refs:
+      - tags
+
+dockerhub-release:
+  stage: deploy
+  extends: .dockerhub
+  variables:
+    REMOTE_VERSION: ${CI_COMMIT_TAG}
+    DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_TAG}
+  only:
+    variables:
+      - $GITLAB_USER_NAME == "PROJECT_BOT_TOKEN"
+    refs:
+      - tags

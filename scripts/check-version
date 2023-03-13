@@ -16,12 +16,82 @@ REMOTE_VERSION=${REMOTE_LATEST_TAG//[\.]/}
 if (( LOCAL_VERSION < REMOTE_VERSION )); then
     # Remote repository does have a new version
     echo "New version detected in remote repository"
-
-    # TODO: Implement Pipeline Trigger
 else
     # Remote does not have a newer version
     # Exit pipeline gracefully
     echo "No new version detected"
+    exit 0
 fi
 
-exit 0
+# We have detected a new version so we are going to continue here
+declare GIT_DEFAULT_BRANCH=master
+declare GIT_USER_NAME=${GIT_USER_NAME:-${CI_PROJECT_NAME^^} (Bot)}
+declare GIT_USER_EMAIL=${GIT_USER_EMAIL:-project_${CI_PROJECT_ID}_bot@${CI_SERVER_HOST}}
+
+# Git Authentication
+declare GIT_USERNAME=project_${CI_PROJECT_ID}_bot
+declare GIT_ACCESS_TOKEN=${GIT_ACCESS_TOKEN:-${PROJECT_BOT_TOKEN}}
+declare GIT_CREDENTIALS="${GIT_USERNAME}:${GIT_ACCESS_TOKEN}"
+
+# Configure Git
+if [ -n "${DEBUG}" ]; then
+    echo "Configuring Git"
+    echo "User:  ${GIT_USER_NAME}"
+    echo "Email: ${GIT_USER_EMAIL}"
+fi
+git config user.name    "${GIT_USER_NAME}"
+git config user.email   "${GIT_USER_EMAIL}"
+
+# Reconfigure Repository
+if [ -n "${DEBUG}" ]; then
+    git checkout ${GIT_DEFAULT_BRANCH}
+else
+    git checkout ${GIT_DEFAULT_BRANCH} > /dev/null
+fi
+
+if [ -n "${DEBUG}" ]; then
+    git reset --hard
+else
+    git reset --hard > /dev/null
+fi
+
+if [ -n "${DEBUG}" ]; then
+    git fetch --prune --all
+else
+    git fetch --prune --all > /dev/null
+fi
+
+# Set the release; $CURRENT_VERSION is provided by bumpver environment
+RELEASE=${VERSION:-$REMOTE_LATEST_TAG}
+echo "Release ${CI_PROJECT_NAME} to ${RELEASE}"
+
+# Create version commit
+git commit -m "build: release ${RELEASE}" --allow-empty
+
+# Remove any existing tag matching the release
+# ensure that we do not fail this command, because the tag wil probably not exist
+# this is actually done in order to override a release and 'MOVE' a tag
+git tag --delete "${RELEASE}" > /dev/null 2>&1 || true
+
+# As done above, remove the tag from the remote if it does exists
+# and afterwards, create the new release tag, if the tag did exist we
+# actually just have moved it.
+# shellcheck disable=SC1083,SC2086
+git push --force https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git :refs/tags/${RELEASE} > /dev/null 2>&1 || true
+git tag --force "${RELEASE}"
+
+# Push to master, and use the push option ci.skip (Git > 2.18)
+# we are using this option because of the following scenario, in order to have a nice git commit history
+# we committed the changelog to the master and tagged that specific commit array set our release
+# if we would not skip the ci then we would also start running the entire master ci pipeline on
+# the changelog commit, while we actually just completed the entire pipeline to reach this point
+# therefore it would be entirely redundant to run the master pipeline on the changelog commit
+#
+# However when we do commit the tag to the remote we are triggering the tag release pipeline
+# which will create a new release
+#
+# shellcheck disable=SC1083,SC2086
+git push -o ci.skip https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git ${GIT_DEFAULT_BRANCH}
+#
+# shellcheck disable=SC1083,SC2086
+git push https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git ${RELEASE}

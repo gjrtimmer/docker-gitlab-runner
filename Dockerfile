@@ -3,6 +3,9 @@ FROM ${DOCKER_PROXY_HOST}/linuxserver/docker-compose:amd64-latest as compose-amd
 
 FROM registry.timmertech.nl/docker/alpine-glibc:latest
 
+ARG REMOTE_VERSION
+ENV REMOTE_VERSION=${REMOTE_VERSION}
+
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositories && \
     echo 'http://dl-cdn.alpinelinux.org/alpine/edge/community'  >> /etc/apk/repositories && \
     apk add --no-cache --force-overwrite --update \
@@ -11,7 +14,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositor
     docker-cli \
     docker-compose \
     shadow && \
-    wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64 && \
+    wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/v${REMOTE_VERSION}/binaries/gitlab-runner-linux-amd64 && \
     chmod +x /usr/local/bin/gitlab-runner && \
     sed "s|ash|bash|" -i /etc/passwd && \
     update-ca-certificates
