@@ -2,6 +2,9 @@
 .gitattributes
 .gitignore
 .gitlab-ci.yml
+git-conventional-commits.json
 CHANGELOG.md
 LICENSE
 README.md
+scripts/*
+.vscode/*
