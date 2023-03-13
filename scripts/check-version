@@ -9,7 +9,7 @@ REMOTE_LATEST_TAG=$(chkver gitlab --project-id 250833 --sanitize --sanitize-fmt 
 # Sanitize LOCAL/REMOTE for compare
 # When sanitized the versions become numbers which can be compared
 # eg. 1591 > 1592
-LOCAL_VERSION=${LOCAL_LATEST_TAG//[\.]/}
+LOCAL_VERSION=${LOCAL_LATEST_TAG//[\.\-A-Za-z]/}
 REMOTE_VERSION=${REMOTE_LATEST_TAG//[\.]/}
 
 # Compare version
