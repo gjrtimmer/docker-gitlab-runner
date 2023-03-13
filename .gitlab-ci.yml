@@ -74,7 +74,7 @@ shellcheck:
 
 checkversion:
   stage: verify
-  image: registry.timmertech.nl/tools/check-version:latest
+  image: registry.timmertech.nl/tools/chkver:latest
   only:
     - master
     - schedules
