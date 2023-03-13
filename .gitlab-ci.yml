@@ -60,8 +60,11 @@ shellcheck:
   cache: {}
   needs: []
   only:
-    - master
-    - branches
+    refs:
+      - master
+      - branches
+    changes:
+      - "rootfs/*"
   variables:
     FILES: "find root/ -type f"
   before_script:
