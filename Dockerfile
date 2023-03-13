@@ -18,7 +18,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main'  >> /etc/apk/repositor
 
 COPY --from=compose-amd64 /usr/local/bin/docker-compose /docker-compose/docker-compose_x86_64
 COPY --from=compose-amd64 /usr/local/bin/docker /docker-compose/docker_x86_64
-COPY root/ /
+COPY rootfs/ /
 
 ARG BUILD_DATE
 ARG CI_PROJECT_NAME
