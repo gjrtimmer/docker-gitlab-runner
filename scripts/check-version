@@ -12,6 +12,11 @@ REMOTE_LATEST_TAG=$(chkver gitlab --project-id 250833 --sanitize --sanitize-fmt 
 LOCAL_VERSION=${LOCAL_LATEST_TAG//[\.\-A-Za-z]/}
 REMOTE_VERSION=${REMOTE_LATEST_TAG//[\.]/}
 
+# Temp bypass old tags
+if (( LOCAL_VERSION = 18091 )); then
+    LOCAL_VERSION=0
+fi
+
 # Compare version
 if (( LOCAL_VERSION < REMOTE_VERSION )); then
     # Remote repository does have a new version
