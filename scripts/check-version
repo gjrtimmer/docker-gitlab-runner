@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Get latest tag from local repository
+LOCAL_LATEST_TAG=$(git describe --tags --abbrev=0)
+
+# Get latest tag from remote repository
+REMOTE_LATEST_TAG=$(chkver gitlab --project-id 250833 --sanitize --sanitize-fmt 'v')
+
+# Sanitize LOCAL/REMOTE for compare
+# When sanitized the versions become numbers which can be compared
+# eg. 1591 > 1592
+LOCAL_VERSION=${LOCAL_LATEST_TAG//[\.]/}
+REMOTE_VERSION=${REMOTE_LATEST_TAG//[\.]/}
+
+# Compare version
+if (( LOCAL_VERSION < REMOTE_VERSION )); then
+    # Remote repository does have a new version
+    echo "New version detected in remote repository"
+
+    # TODO: Implement Pipeline Trigger
+else
+    # Remote does not have a newer version
+    # Exit pipeline gracefully
+    echo "No new version detected"
+fi
+
+exit 0

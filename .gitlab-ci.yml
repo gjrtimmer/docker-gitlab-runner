@@ -60,9 +60,8 @@ shellcheck:
   cache: {}
   needs: []
   only:
-    refs:
-      - master
-      - branches
+    - master
+    - branches
   variables:
     FILES: "find root/ -type f"
   before_script:
@@ -73,14 +72,12 @@ shellcheck:
 checkversion:
   stage: verify
   image: registry.timmertech.nl/tools/check-version:latest
-  allow_failure: true
   only:
-    refs:
-      - master
-      - schedules
+    - master
+    - schedules
   before_script: []
   script:
-    - chkver -c $(cat VERSION) gitlab --project-id 250833 --sanitize
+    - scripts/check-version
 # build:
 #   stage: build
 #   extends: .build
