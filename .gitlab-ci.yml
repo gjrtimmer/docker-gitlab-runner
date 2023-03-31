@@ -62,7 +62,7 @@ shellcheck:
   needs: []
   only:
     refs:
-      - master
+      - main
       - branches
     changes:
       - rootfs/*
@@ -80,7 +80,7 @@ checkversion:
     variables:
       - $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN"
     refs:
-      - master
+      - main
       - schedules
   before_script: []
   script:

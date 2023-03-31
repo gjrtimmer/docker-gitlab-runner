@@ -1,4 +1,4 @@
-[![build status](https://gitlab.timmertech.nl/docker/gitlab-runner/badges/master/pipeline.svg)](https://gitlab.timmertech.nl/docker/gitlab-runner/commits/master)
+[![build status](https://gitlab.timmertech.nl/docker/gitlab-runner/badges/main/pipeline.svg)](https://gitlab.timmertech.nl/docker/gitlab-runner/commits/main)
 
 # gitlab-runner
 
