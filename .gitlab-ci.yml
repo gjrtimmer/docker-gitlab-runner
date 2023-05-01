@@ -44,7 +44,7 @@ workflow:
       --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
       --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
       --build-arg DOCKER_PROXY_HOST=${DOCKER_PROXY_HOST}
-      --build-arg REMOTE_VERSION=${REMOTE_VERSION}
+      --build-arg REMOTE_VERSION=${RELEASE}
       --file=${DOCKER_FILE}
       --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
