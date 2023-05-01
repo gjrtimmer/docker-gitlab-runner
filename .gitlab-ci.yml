@@ -92,7 +92,7 @@ build:
   variables:
     REMOTE_VERSION: ${CI_COMMIT_TAG}
   only:
-    - tags
+    - main
 
 dockerhub:
   stage: deploy
