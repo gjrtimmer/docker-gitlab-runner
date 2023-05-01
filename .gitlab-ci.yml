@@ -44,7 +44,7 @@ workflow:
       --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
       --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
       --build-arg DOCKER_PROXY_HOST=${DOCKER_PROXY_HOST}
-      --build-arg REMOTE_VERSION=${RELEASE}
+      --build-arg REMOTE_VERSION=${REMOTE_VERSION}
       --file=${DOCKER_FILE}
       --tag=${DOCKER_IMAGE} .
     - docker push ${DOCKER_IMAGE}
@@ -80,28 +80,10 @@ checkversion:
     variables:
       - $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN"
     refs:
-      - main
       - schedules
   before_script: []
   script:
     - scripts/check-version
-
-build:
-  stage: build
-  extends: .build
-  variables:
-    REMOTE_VERSION: ${CI_COMMIT_TAG}
-  only:
-    - main
-
-dockerhub:
-  stage: deploy
-  extends: .dockerhub
-  variables:
-    REMOTE_VERSION: ${CI_COMMIT_TAG}
-    DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:latest
-  only:
-    - tags
 
 release:
   stage: build
@@ -112,7 +94,7 @@ release:
   only:
     - tags
 
-dockerhub-release:
+dockerhub:
   stage: deploy
   extends: .dockerhub
   variables:
