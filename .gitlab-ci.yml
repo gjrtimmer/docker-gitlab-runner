@@ -1,4 +1,5 @@
-image: registry.timmertech.nl/docker/docker:latest
+default:
+  image: registry.timmertech.nl/docker/docker:latest
 
 stages:
   - verify
@@ -8,12 +9,7 @@ stages:
 include:
   - project: templates/ci
     file: docker.yml
-  - project: templates/ci
-    file: docker-hub.yml
 
-################################################################################
-# Workflow
-################################################################################
 workflow:
   rules:
     # If $VERSION variable defined have it take precedence over the commit tag
@@ -31,27 +27,13 @@ workflow:
     - if: "$CI_COMMIT_BRANCH"
     - when: always
 
-################################################################################
-# Templates
-################################################################################
 .build:
-  interruptible: true
-  script:
-    - docker build --pull
-      --build-arg VCS_REF="${CI_COMMIT_SHORT_SHA}"
-      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
-      --build-arg CI_PROJECT_NAME=${CI_PROJECT_NAME}
-      --build-arg CI_PROJECT_URL="${CI_PROJECT_URL}"
-      --build-arg DOCKER_IMAGE=${DOCKER_IMAGE}
-      --build-arg DOCKER_PROXY_HOST=${DOCKER_PROXY_HOST}
+  extends: .docker-build-multi
+  variables:
+    PLATFORM: "linux/arm64,linux/amd64"
+    BUILD_ARGS: >-
       --build-arg REMOTE_VERSION=${REMOTE_VERSION}
-      --file=${DOCKER_FILE}
-      --tag=${DOCKER_IMAGE} .
-    - docker push ${DOCKER_IMAGE}
 
-################################################################################
-# Job Configuration
-################################################################################
 # Verify Bash Scripting
 shellcheck:
   stage: verify
@@ -86,19 +68,19 @@ checkversion:
     - scripts/check-version
 
 release:
-  stage: build
   extends: .build
   variables:
     REMOTE_VERSION: ${CI_COMMIT_TAG}
-    DOCKER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_TAG}
+    DOCKER_IMAGE: ${DOCKER_IMAGE_PATH}:${CI_COMMIT_TAG}
   only:
     - tags
 
 dockerhub:
   stage: deploy
-  extends: .dockerhub
+  extends: .build
   variables:
     REMOTE_VERSION: ${CI_COMMIT_TAG}
-    DOCKERHUB_IMAGE: ${DOCKERHUB_REGISTRY}/${DOCKERHUB_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_TAG}
+    DOCKER_HUB: "ENABLED"
+    DOCKER_IMAGE: ${DOCKER_IMAGE_HUB_PATH}:${CI_COMMIT_TAG}
   only:
     - tags
