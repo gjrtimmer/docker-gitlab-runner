@@ -1,18 +1,6 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash disable=SC1008
 
-echo "**** installing docker and docker compose ****"
-ARCH=$(uname -m)
-if [ -f "/docker-compose/docker-compose_${ARCH}" ]; then
-  echo "Copying over docker and docker-compose binaries"
-  mv "/docker-compose/docker-compose_${ARCH}" /usr/local/bin/docker-compose
-  mv "/docker-compose/docker_${ARCH}" /usr/local/bin/docker
-  chmod +x /usr/local/bin/docker-compose
-  rm -rf /docker-compose
-else
-  echo "**** docker and docker-compose already installed, skipping ****"
-fi
-
 if [ -S /var/run/docker.sock ]; then
   DOCKER_GID=$(stat -c '%g' "/var/run/docker.sock")
   if id -G abc | grep -qw "$DOCKER_GID"; then
