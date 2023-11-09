@@ -71,16 +71,9 @@ release:
   extends: .build
   variables:
     REMOTE_VERSION: ${CI_COMMIT_TAG}
-    DOCKER_IMAGE: ${DOCKER_IMAGE_PATH}:${CI_COMMIT_TAG}
-  only:
-    - tags
-
-dockerhub:
-  stage: deploy
-  extends: .build
-  variables:
-    REMOTE_VERSION: ${CI_COMMIT_TAG}
     DOCKER_HUB: "ENABLED"
-    DOCKER_IMAGE: ${DOCKER_IMAGE_HUB_PATH}:${CI_COMMIT_TAG}
+    DOCKER_IMAGE: ${DOCKER_IMAGE_PATH}:${CI_COMMIT_TAG}
+    DOCKER_TAGS: >-
+      --tag=${DOCKER_IMAGE_HUB_PATH}:${CI_COMMIT_TAG}
   only:
     - tags
