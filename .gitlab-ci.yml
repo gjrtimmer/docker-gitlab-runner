@@ -31,7 +31,7 @@ workflow:
   extends: .docker-build-multi
   variables:
     PLATFORM: "linux/arm64,linux/amd64"
-    BUILD_ARGS: >-
+    DOCKER_BUILD_ARGS: >-
       --build-arg REMOTE_VERSION=${REMOTE_VERSION}
 
 # Verify Bash Scripting
