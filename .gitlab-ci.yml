@@ -33,12 +33,13 @@ workflow:
     PLATFORM: "linux/arm64,linux/amd64"
     DOCKER_ARGS: >-
       --build-arg REMOTE_VERSION=${REMOTE_VERSION}
+      --cache-from=type=registry,ref=${DOCKER_IMAGE}
 
 # Verify Bash Scripting
 shellcheck:
   stage: verify
   image:
-    name: ${CI_REGISTRY}/docker/shellcheck:latest
+    name: ${CI_REGISTRY}/tools/shellcheck:latest
   interruptible: true
   cache: {}
   needs: []
