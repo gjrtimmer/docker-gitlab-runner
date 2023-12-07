@@ -1,8 +1,0 @@
-#!/usr/bin/with-contenv bash
-# shellcheck shell=bash disable=SC1008
-set -e
-
-# Run in system mode
-exec /usr/local/bin/gitlab-runner run --working-directory "${HOME}" --config "${HOME}/config.toml"
-
-# EOF

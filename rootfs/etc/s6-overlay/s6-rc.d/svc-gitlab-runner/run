@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash disable=SC1008
+set -e
+
+# shellcheck source=rootfs/etc/conf.d/env.generic disable=SC1091
+source /etc/conf.d/env.generic
+
+# shellcheck source=rootfs/etc/conf.d/fn.generic disable=SC1091
+source /etc/conf.d/fn.generic
+
+# shellcheck source=rootfs/etc/conf.d/env.gitlab.runner disable=SC1091
+source /etc/conf.d/env.gitlab.runner
+
+# Start GitLab Runner
+exec s6-setuidgid abc gitlab-runner run --working-directory "${HOME}" --config "${HOME}/config.toml"

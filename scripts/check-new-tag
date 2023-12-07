@@ -1,0 +1,97 @@
+#!/usr/bin/bash
+# shellcheck shell=bash disable=SC1072
+
+# This script will automatically detect any new version of the GitLab Runner
+# This will include all security patches of supported versions
+
+# set nocasematch option
+shopt -s nocasematch
+
+# We have detected a new version so we are going to continue here
+declare -r GIT_DEFAULT_BRANCH=main
+declare -r GIT_USER_NAME=${GIT_USER_NAME:-${CI_PROJECT_NAME^^} (Bot)}
+declare -r GIT_USER_EMAIL=${GIT_USER_EMAIL:-project_${CI_PROJECT_ID}_bot@${CI_SERVER_HOST}}
+
+# Git Authentication
+declare -r GIT_USERNAME=project_${CI_PROJECT_ID}_bot
+declare -r GIT_ACCESS_TOKEN=${GIT_ACCESS_TOKEN:-${PROJECT_BOT_TOKEN}}
+declare -r GIT_CREDENTIALS="${GIT_USERNAME}:${GIT_ACCESS_TOKEN}"
+
+# Configure Git
+if [ -n "${DEBUG}" ]; then
+    echo "Configuring Git"
+    echo "User:  ${GIT_USER_NAME}"
+    echo "Email: ${GIT_USER_EMAIL}"
+fi
+git config user.name    "${GIT_USER_NAME}"
+git config user.email   "${GIT_USER_EMAIL}"
+
+# Filter Releases
+# 
+# Filter all releases from GitLab > 12
+# Initial version of this script was created at 2023/12/04 (4 dec 2023)
+# At this time the supported versions of GitLab are/were: 14, 15, 16
+# Version 13 was included in this script for people whom are using this
+# gitlab runner while still on GitLab 12.
+#
+# Negate:
+# rc        : No Release candidates
+# dev       : No Development releases
+# (!) v     : Filter releases that does not start with 'v'
+filter_release() {
+    while read -r LINE; do
+
+        # Filter down to supported versions only
+        if [[ $LINE =~ ^v((1[2-9]|([1-9]{1}[0-9]{2,}))\..*) ]]; then
+        #if [[ $LINE =~ ^(v(${SUPPORTED_VERSIONS})\..*) ]]; then
+            if [[ ! $LINE =~ (RC.*|dev)$ ]] && [[ $LINE =~ ^(v.*) ]]; then
+                echo "${LINE}"
+            fi
+        fi
+    done
+}
+
+# Fetch all remote tags
+#gitlab -g gitlab -o yaml project-tag list --project-id 250833 --get-all > tags.yml
+
+# Filter & sort release releases
+TAGS=$(yq '.[].name' tags.yml | filter_release | sort -u -V )
+
+# Loop all remote tags
+while IFS= read -r TAG; do
+    if ! git rev-parse "${TAG:1}" > /dev/null 2>&1; then
+        # git tag does not exists, create this tag in repository
+        RELEASE=${VERSION:-${TAG:1}}
+        echo "Adding release: ${TAG:1}"
+        # Create version commit
+        git commit -m "build: release ${RELEASE}" --allow-empty
+
+        # Remove any existing tag matching the release
+        # ensure that we do not fail this command, because the tag wil probably not exist
+        # this is actually done in order to override a release and 'MOVE' a tag
+        git tag --delete "${RELEASE}" > /dev/null 2>&1 || true
+
+        # As done above, remove the tag from the remote if it does exists
+        # and afterwards, create the new release tag, if the tag did exist we
+        # actually just have moved it.
+        # shellcheck disable=SC1083,SC2086
+        # git push --force https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git :refs/tags/${RELEASE} > /dev/null 2>&1 || true
+        git tag --force "${RELEASE}"
+    fi
+done <<< "${TAGS}"
+
+# Push to main, and use the push option ci.skip (Git > 2.18)
+# we are using this option because of the following scenario, in order to have a nice git commit history
+# we committed the changelog to the main and tagged that specific commit array set our release
+# if we would not skip the ci then we would also start running the entire main ci pipeline on
+# the changelog commit, while we actually just completed the entire pipeline to reach this point
+# therefore it would be entirely redundant to run the main pipeline on the changelog commit
+#
+# However when we do commit the tag to the remote we are triggering the tag release pipeline
+# which will create a new release
+#
+# shellcheck disable=SC1083,SC2086
+# git push -o ci.skip --follow-tags https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git ${GIT_DEFAULT_BRANCH}
+#
+# shellcheck disable=SC1083,SC2086
+# git push https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git ${RELEASE}

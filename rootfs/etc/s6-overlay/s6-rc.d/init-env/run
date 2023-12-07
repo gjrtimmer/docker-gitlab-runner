@@ -1,0 +1,157 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+# shellcheck source=rootfs/etc/conf.d/env.generic disable=SC1091
+source /etc/conf.d/env.generic
+
+# shellcheck source=rootfs/etc/conf.d/fn.generic disable=SC1091
+source /etc/conf.d/fn.generic
+
+# shellcheck disable=SC2011
+if [[ "$(ls /var/run/s6/container_environment/ | xargs)" == *"FILE__"* ]]; then
+  for FILENAME in /var/run/s6/container_environment/*; do
+    if [[ "${FILENAME##*/}" == "FILE__"* ]]; then
+      SECRETFILE=$(cat "${FILENAME}")
+      if [[ -f ${SECRETFILE} ]]; then
+        FILESTRIP=${FILENAME//FILE__/}
+        cat "${SECRETFILE}" > "${FILESTRIP}"
+        echo "[env-init] ${FILESTRIP##*/} set from ${FILENAME##*/}"
+      else
+        echo "[env-init] cannot find secret in ${FILENAME##*/}"
+      fi
+    fi
+  done
+fi
+
+# Set container timezone
+cp "/usr/share/zoneinfo/${TZ}" /etc/localtime
+log-init "Timezone set to ${TZ}"
+
+# Load Environment Variables
+set -o allexport
+# shellcheck source=rootfs/etc/conf.d/fn.generic disable=SC1091
+source /etc/conf.d/env.generic
+set +o allexport
+
+# Print Environment
+log-init "Environment Variables:"
+MASKED=("REGISTRATION_TOKEN" "GITLAB_RUNNER_TOKEN" "GITLAB_RUNNER_REGISTRATION_TOKEN")
+env -0 | sort -z | while IFS='=' read -r -d '' k v; do
+  if [ -z "$v" ]; then
+    log-init "  $k=<not-set>"
+  else
+    if [[ " ${MASKED[*]} " =~ $k ]]; then
+      log-init "  $k=********"
+    else
+      log-init "  $k=$v"
+    fi
+  fi
+done
+
+mkdir -p /config/{.docker,.ssh,builds,certs}
+mkdir -p /config/cache/{docker,runner}
+
+# Setup Password
+if [ -n "${SUDO_PASSWORD}" ] || [ -n "${SUDO_PASSWORD_HASH}" ]; then
+    echo "setting up sudo access"
+    if ! grep -q 'abc' /etc/sudoers; then
+        echo "adding abc to sudoers"
+        echo "abc ALL=(ALL:ALL) ALL" >> /etc/sudoers
+    fi
+    if [ -n "${SUDO_PASSWORD_HASH}" ]; then
+        echo "setting sudo password using sudo password hash"
+        sed -i "s|^abc:\!:|abc:${SUDO_PASSWORD_HASH}:|" /etc/shadow
+    else
+        echo "setting sudo password using SUDO_PASSWORD env var"
+        echo -e "${SUDO_PASSWORD}\n${SUDO_PASSWORD}" | passwd abc
+    fi
+fi
+
+# Permissions
+if [ -f "/usr/bin/find" ] && [ -f "/usr/bin/xargs" ]; then
+    # Split workload between config and workspace
+    echo "setting permissions::configuration"
+    CORES=$(nproc --all)
+    find /config -maxdepth 4 -mindepth 1 -path /config/data -prune -false -o -type d -print0 | \
+        xargs -0 -r --max-args=1 --max-procs=$((CORES*2*8)) \
+        chown -R abc:abc
+
+    BG=""
+    if is_enabled "${CHOWN_BACKGROUND}"; then
+        echo "setting permissions::workspace (Background)"
+        BG="&"
+    else
+        echo "setting permissions::workspace"
+    fi
+
+    chown abc:abc /config/data
+    find /config/data -maxdepth 4 -mindepth 1 -type d -print0 | \
+        xargs -0 -r --max-args=1 --max-procs=$((CORES*2*16)) \
+        chown -R abc:abc ${BG}
+
+else
+    chown -R abc:abc
+        /config
+fi
+
+if [[ ! -e /config/.ssh/id_rsa || ! -e /config/.ssh/id_rsa.pub ]]; then
+	echo -n "  generating ssh deploy keys..."
+	rm -rf /config/.ssh/id_rsa /config/.ssh/id_rsa.pub
+	ssh-keygen -o -t rsa -N "" -f /config/.ssh/id_rsa > /dev/null 2>&1
+	echo " [DONE]"
+fi
+
+echo -n "setting ssh permissions..."
+chmod 600 /config/.ssh/id_rsa /config/.ssh/id_rsa.pub
+chmod 700 /config/.ssh
+echo " [DONE]"
+
+if [ -n "${SSH_KEY_COMMENT}" ]; then
+	echo "setting key comment to: ${SSH_KEY_COMMENT}"
+	ssh-keygen -f /config/.ssh/id_rsa.pub -o -c -C "${SSH_KEY_COMMENT}"
+fi
+
+echo -n "your ssh deploy key is: "
+cat /config/.ssh/id_rsa.pub
+echo ""
+
+# Define CA certificates location
+CA_CERTIFICATES=${CA_CERTIFICATES:-/config/certs}
+if [ -e "${CA_CERTIFICATES}" ]; then
+	echo "linking certificate $(basename "${CA_CERTIFICATES}")"
+	ln -sf "${CA_CERTIFICATES}" "/usr/local/share/ca-certificates/$(basename "${CA_CERTIFICATES}")"
+fi
+
+# Perform removal of non existent certificate links
+# this might occur when user decides to update the certificates
+# or when the user decides to mount a certificates volume
+#
+# always check if previously created certificate links
+# must be removed when the container restarts/recreated
+for ELM in /usr/local/share/ca-certificates/*; do
+	if [ ! -e "${ELM}" ]; then
+		# Entries should always be symlinks because of previous function
+		rm "${ELM}"
+	fi
+done
+echo "updating certificates"
+update-ca-certificates --fresh > /dev/null 2>&1 || true
+
+# Configure Docker
+if [ -S /var/run/docker.sock ]; then
+  DOCKER_GID=$(stat -c '%g' "/var/run/docker.sock")
+  if id -G abc | grep -qw "$DOCKER_GID"; then
+    exit 0
+  else
+    DOCKER_NAME=$(getent group "${DOCKER_GID}" | awk -F: '{print $1}')
+    if [ -z "${DOCKER_NAME}" ]; then
+      DOCKER_NAME="dockergroup"
+      groupadd -g "${DOCKER_GID}" "${DOCKER_NAME}"
+    fi
+    usermod -aG "${DOCKER_NAME}" abc
+  fi
+elif [ -n "$DOCKER_HOST" ]; then
+  echo "**** /var/run/docker.sock is not mapped, therefore, docker client will only work with a remote docker service ****"
+else
+  echo "**** Please map /var/run/docker.sock for access to docker service on host. Alternatively you can manually define a remote host address with the docker cli option -H ****"
+fi

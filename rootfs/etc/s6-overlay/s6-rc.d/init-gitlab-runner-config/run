@@ -1,0 +1,32 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+# shellcheck source=rootfs/etc/conf.d/env.generic disable=SC1091
+source /etc/conf.d/env.generic
+
+# shellcheck source=rootfs/etc/conf.d/fn.generic disable=SC1091
+source /etc/conf.d/fn.generic
+
+# shellcheck source=rootfs/etc/conf.d/env.gitlab.runner disable=SC1091
+source /etc/conf.d/env.gitlab.runner
+
+echo -n "  Waiting for GitLab to be ready"
+until curl -I -sL -w '%{http_code}\n' --max-time 60 -o /dev/null "${CI_SERVER_URL}" -ne 200; do
+	CI_SERVER_URL_TIMEOUT=$((WAIT_GITLAB_TIMEOUT - 10))
+	if [[ ${CI_SERVER_URL_TIMEOUT} -eq 0 ]]; then
+		echo " [TIMEOUT]"
+		exit 1
+	fi
+	echo -n "."
+	sleep 10
+done
+echo " [READY]"
+
+# Register Runner
+if [[ ! -e /config/config.toml ]]; then
+	if [[ -n ${CI_SERVER_URL} && -n ${REGISTRATION_TOKEN} && -n ${RUNNER_NAME} ]]; then
+		gitlab-runner register --config /config/config.toml
+	else
+		echo "Missing Required environment variable(s) CI_SERVER_URL, REGISTRATION_TOKEN, RUNNER_NAME"
+	fi
+fi
