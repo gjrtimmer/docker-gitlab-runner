@@ -8,7 +8,7 @@ cache: []
 
 variables:
   GIT_STRATEGY: clone
-  DOCKER_IMAGE_BASE: ${CI_REGISTRY}/docker/alpine-base/cache:latest
+  UPSTREAM_IMAGE: registry.timmertech.nl/docker/alpine-base-service
   TRIGGER_SHELLCHECK:
     description: Run ShellCheck
     value: "DISABLED"
@@ -81,6 +81,9 @@ release:
     DOCKER_IMAGE: ${DOCKER_IMAGE_PATH}:${CI_COMMIT_TAG}
     DOCKER_ARGS: >-
       --build-arg REMOTE_VERSION=${REMOTE_VERSION}
-      --cache-from=type=registry,ref=${DOCKER_IMAGE_BASE}
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:amd64
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:arm64
+      --build-arg=DOCKER_IMAGE_BASE=${UPSTREAM_IMAGE}:latest
     DOCKER_TAGS: >-
       --tag=${DOCKER_IMAGE_HUB_PATH}:${CI_COMMIT_TAG}
