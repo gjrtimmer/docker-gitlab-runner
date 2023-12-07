@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+
+declare -r VERSION="${1}"
+declare -r TOKEN="${2}"
+declare -r URL="${3}"
+
+docker run \
+    --rm \
+    --name runner-test \
+    -e REGISTRATION_TOKEN="${TOKEN}" \
+    -e CI_SERVER_RUL="${URL}" \
+    -t registry.timmertech.nl/docker/gitlab-runner:"${VERSION}"
