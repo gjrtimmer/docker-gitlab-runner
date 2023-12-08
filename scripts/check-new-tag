@@ -62,21 +62,23 @@ while IFS= read -r TAG; do
     if ! git rev-parse "${TAG:1}" > /dev/null 2>&1; then
         # git tag does not exists, create this tag in repository
         RELEASE=${VERSION:-${TAG:1}}
-        echo "Adding release: ${TAG:1}"
-        # Create version commit
-        git commit -m "build: release ${RELEASE}" --allow-empty
+        if [ -n "${RELEASE}" ]; then
+            echo "Adding release: ${TAG:1}"
+            # Create version commit
+            git commit -m "build: release ${RELEASE}" --allow-empty
 
-        # Remove any existing tag matching the release
-        # ensure that we do not fail this command, because the tag wil probably not exist
-        # this is actually done in order to override a release and 'MOVE' a tag
-        git tag --delete "${RELEASE}" > /dev/null 2>&1 || true
+            # Remove any existing tag matching the release
+            # ensure that we do not fail this command, because the tag wil probably not exist
+            # this is actually done in order to override a release and 'MOVE' a tag
+            git tag --delete "${RELEASE}" > /dev/null 2>&1 || true
 
-        # As done above, remove the tag from the remote if it does exists
-        # and afterwards, create the new release tag, if the tag did exist we
-        # actually just have moved it.
-        # shellcheck disable=SC1083,SC2086
-        git push --force https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git :refs/tags/${RELEASE} > /dev/null 2>&1 || true
-        git tag --force "${RELEASE}"
+            # As done above, remove the tag from the remote if it does exists
+            # and afterwards, create the new release tag, if the tag did exist we
+            # actually just have moved it.
+            # shellcheck disable=SC1083,SC2086
+            git push --force https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git :refs/tags/${RELEASE} > /dev/null 2>&1 || true
+            git tag --force "${RELEASE}"
+        fi
     fi
 done <<< "${TAGS}"
 
