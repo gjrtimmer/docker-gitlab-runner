@@ -52,7 +52,7 @@ filter_release() {
 }
 
 # Fetch all remote tags
-#gitlab -g gitlab -o yaml project-tag list --project-id 250833 --get-all > tags.yml
+gitlab -g gitlab -o yaml project-tag list --project-id 250833 --get-all > tags.yml
 
 # Filter & sort release releases
 TAGS=$(yq '.[].name' tags.yml | filter_release | sort -u -V )
