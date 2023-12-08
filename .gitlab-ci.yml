@@ -102,6 +102,8 @@ rebuild:tags:
   stage: deploy
   needs:
     - rebuild
+  rules:
+    - if: $TRIGGER_REBUILD == 'ENABLED'
   inherit:
     variables: false
   trigger:
