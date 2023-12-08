@@ -62,18 +62,12 @@ shellcheck:
     - find scripts/ -type f | xargs -n 1 shellcheck -a -x --color=always
 
 check-new-tags:
-  stage: test
-  image:
-    name: registry.timmertech.nl/tools/gitlab-cli:latest
-    pull_policy: always
+  extends: .gitlab-cli
   rules:
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"
   variables:
-    GITLAB_CLI: "ENABLED"
     HEALTH_CHECK_UUID: f032f24d-963c-4014-9425-f6a9ac8b7070
-  before_script: !reference [.gitlab-cli, before_script]
-  after_script: !reference [.gitlab-cli, after_script]
   script:
     - scripts/check-new-tag
 
