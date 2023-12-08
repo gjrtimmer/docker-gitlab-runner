@@ -61,7 +61,6 @@ check-new-tags:
     name: registry.timmertech.nl/tools/gitlab-cli:latest
     pull_policy: always
   rules:
-    - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"
   variables:
