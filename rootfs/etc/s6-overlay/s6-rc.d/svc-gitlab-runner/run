@@ -8,8 +8,10 @@ source /etc/conf.d/env.generic
 # shellcheck source=rootfs/etc/conf.d/fn.generic disable=SC1091
 source /etc/conf.d/fn.generic
 
+set -o allexport
 # shellcheck source=rootfs/etc/conf.d/env.gitlab.runner disable=SC1091
 source /etc/conf.d/env.gitlab.runner
+set +o allexport
 
 # Start GitLab Runner
-exec s6-setuidgid abc gitlab-runner run --working-directory "${HOME}" --config "${HOME}/config.toml"
+exec gitlab-runner run --working-directory "${HOME}" --config "${HOME}/config.toml"
