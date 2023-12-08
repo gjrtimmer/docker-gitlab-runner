@@ -93,7 +93,7 @@ done <<< "${TAGS}"
 # which will create a new release
 #
 # shellcheck disable=SC1083,SC2086
-git push -o ci.skip --follow-tags --tags https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git refs/heads/${GIT_DEFAULT_BRANCH}
+git push -o ci.skip --force --follow-tags --tags https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git ${GIT_DEFAULT_BRANCH}
 #
 # shellcheck disable=SC1083,SC2086
 # git push https://${GIT_CREDENTIALS}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git ${RELEASE}
