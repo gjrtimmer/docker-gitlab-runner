@@ -71,6 +71,35 @@ check-new-tags:
   script:
     - scripts/check-new-tag
 
+rebuild:
+  stage: build
+  rules:
+    - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_PIPELINE_SOURCE == "push"
+    - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_PIPELINE_SOURCE == "schedule"
+    - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_PIPELINE_SOURCE == "web"
+  before_script: []
+  after_script: []
+  script:
+    - git tag --sort=version:refname > .gitlab/versions.tags
+    - jq -c -n --arg inarr "$(cat .gitlab/versions.tags)" '$inarr | split("\n")' > .gitlab/versions.json
+    - sed "s~###REMOTE_VERSIONS###~$(cat .gitlab/versions.json)~" .gitlab/rebuild.tmpl.yml > rebuild.yml
+  artifacts:
+    paths:
+      - .gitlab/versions.tags
+      - .gitlab/versions.json
+      - .gitlab/rebuild.yml
+
+rebuild:tags:
+  stage: deploy
+  needs:
+    - rebuild
+  inherit:
+    variables: false
+  trigger:
+    include:
+      - job: rebuild
+        artifact: .gitlab/rebuild.yml
+
 release:
   extends: .docker-build-multi
   rules:

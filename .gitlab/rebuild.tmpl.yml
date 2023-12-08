@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json
+include:
+  - project: templates/ci
+    file: default.yml
+
+cache: []
+
+variables:
+  GIT_STRATEGY: clone
+  UPSTREAM_IMAGE: registry.timmertech.nl/docker/alpine-base-service
+
+rebuild:
+  extends: .docker-build-multi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'parent_pipeline'
+  parallel:
+    matrix:
+      - REMOTE_VERSION: ###REMOTE_VERSIONS###
+  resource_group: $REMOTE_VERSION
+  variables:
+    PLATFORM: "linux/arm64,linux/amd64"
+    DOCKER_HUB: "ENABLED"
+    DOCKER_IMAGE: ${DOCKER_IMAGE_PATH}:${REMOTE_VERSION}
+    DOCKER_IMAGE_CACHE_TO: ${DOCKER_IMAGE_CACHE_PATH}:${REMOTE_VERSION}
+    DOCKER_ARGS: >-
+      --build-arg REMOTE_VERSION=${REMOTE_VERSION}
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:latest
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:amd64
+      --cache-from=type=registry,ref=${UPSTREAM_IMAGE}/cache:arm64
+      --build-arg=DOCKER_IMAGE_BASE=${UPSTREAM_IMAGE}:latest
+    DOCKER_TAGS: >-
+      --tag=${DOCKER_IMAGE_HUB_PATH}:${REMOTE_VERSION}
