@@ -25,7 +25,7 @@ echo " [READY]"
 # Register Runner
 if [[ ! -e /config/config.toml ]]; then
 	if [[ -n ${CI_SERVER_URL} && -n ${REGISTRATION_TOKEN} && -n ${RUNNER_NAME} ]]; then
-		gitlab-runner register --config /config/config.toml
+		exec s6-setuidgid abc gitlab-runner register --config /config/config.toml
 	else
 		echo "Missing Required environment variable(s) CI_SERVER_URL, REGISTRATION_TOKEN, RUNNER_NAME"
 	fi
