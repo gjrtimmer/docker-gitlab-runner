@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+declare -r VERSION="${1}"
+
+docker build \
+    --build-arg=DOCKER_IMAGE_BASE=registry.timmertech.nl/docker/alpine-base-service:latest \
+    --build-arg=REMOTE_VERSION="${VERSION}" \
+    -t registry.timmertech.nl/docker/gitlab-runner:"${VERSION}" \
+    .
