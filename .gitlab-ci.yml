@@ -16,7 +16,7 @@ variables:
       - "ENABLED"
       - "DISABLED"
   TRIGGER_REBUILD:
-    description:
+    description: Rebuild
     value: "DISABLED"
     options:
       - "ENABLED"
