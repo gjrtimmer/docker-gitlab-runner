@@ -2,7 +2,7 @@ ARG DOCKER_IMAGE_BASE
 FROM ${DOCKER_IMAGE_BASE}
 
 ARG REMOTE_VERSION
-ENV REMOTE_VERSION=${REMOTE_VERSION}
+ENV RUNNER_VERSION=${REMOTE_VERSION}
 
 ARG TARGETARCH
 RUN apk add --no-cache --force-overwrite --update \
@@ -13,7 +13,7 @@ RUN apk add --no-cache --force-overwrite --update \
     docker-cli-buildx \
     docker-cli-compose \
     shadow && \
-    wget -O /usr/local/bin/gitlab-runner https://s3.amazonaws.com/gitlab-runner-downloads/v${REMOTE_VERSION}/binaries/gitlab-runner-linux-${TARGETARCH} && \
+    wget -O /usr/local/bin/gitlab-runner https://s3.amazonaws.com/gitlab-runner-downloads/v${RUNNER_VERSION}/binaries/gitlab-runner-linux-${TARGETARCH} && \
     chmod +x /usr/local/bin/gitlab-runner && \
     sed "s|ash|bash|" -i /etc/passwd && \
     update-ca-certificates
