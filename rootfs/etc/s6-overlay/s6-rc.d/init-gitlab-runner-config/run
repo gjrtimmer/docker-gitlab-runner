@@ -22,11 +22,18 @@ until curl -I -sL -w '%{http_code}\n' --max-time 60 -o /dev/null "${CI_SERVER_UR
 done
 echo " [READY]"
 
+set -o allexport
+source /etc/conf.d/env.gitlab.runner
+set +o allexport
+
 # Register Runner
 if [[ ! -e /config/config.toml ]]; then
 	if [[ -n ${CI_SERVER_URL} && -n ${REGISTRATION_TOKEN} && -n ${RUNNER_NAME} ]]; then
-		exec gitlab-runner register -n --config /config/config.toml
+		exec gitlab-runner register -n --executor "${RUNNER_EXECUTOR}" --config /config/config.toml
 	else
 		echo "Missing Required environment variable(s) CI_SERVER_URL, REGISTRATION_TOKEN, RUNNER_NAME"
 	fi
 fi
+
+# Fix config.toml permissions
+lsiown abc:abc /config/config.toml
