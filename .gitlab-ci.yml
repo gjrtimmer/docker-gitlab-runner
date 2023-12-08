@@ -71,6 +71,7 @@ check-new-tags:
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"
   variables:
     HEALTH_CHECK_UUID: f032f24d-963c-4014-9425-f6a9ac8b7070
+  before_script: []
   script:
     - scripts/check-new-tag
 
