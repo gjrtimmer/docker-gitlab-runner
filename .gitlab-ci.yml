@@ -85,7 +85,7 @@ rebuild:
   script:
     - git tag --sort=version:refname > .gitlab/versions.tags
     - jq -c -n --arg inarr "$(cat .gitlab/versions.tags)" '$inarr | split("\n")' > .gitlab/versions.json
-    - sed "s~###REMOTE_VERSIONS###~$(cat .gitlab/versions.json)~" .gitlab/rebuild.tmpl.yml > rebuild.yml
+    - sed "s~###REMOTE_VERSIONS###~$(cat .gitlab/versions.json)~" .gitlab/rebuild.tmpl.yml > .gitlab/rebuild.yml
   artifacts:
     paths:
       - .gitlab/versions.tags
