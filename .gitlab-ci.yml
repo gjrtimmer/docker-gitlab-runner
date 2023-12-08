@@ -62,7 +62,10 @@ shellcheck:
     - find scripts/ -type f | xargs -n 1 shellcheck -a -x --color=always
 
 check-new-tags:
-  extends: .gitlab-cli
+  stage: test
+  image:
+    name: registry.timmertech.nl/tools/gitlab-cli:latest
+    pull_policy: always
   rules:
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"
