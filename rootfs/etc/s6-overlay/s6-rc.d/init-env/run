@@ -31,6 +31,7 @@ log-init "Timezone set to ${TZ}"
 set -o allexport
 # shellcheck source=rootfs/etc/conf.d/fn.generic disable=SC1091
 source /etc/conf.d/env.generic
+source /etc/conf.d/env.gitlab.runner
 set +o allexport
 
 # Print Environment
