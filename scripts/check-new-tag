@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 # shellcheck shell=bash disable=SC1072
 
 # This script will automatically detect any new version of the GitLab Runner
