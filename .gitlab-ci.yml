@@ -18,19 +18,9 @@ variables:
 
 workflow:
   rules:
-    # If $VERSION variable defined have it take precedence over the commit tag
-    - if: $VERSION
-      variables:
-        RELEASE: "${VERSION}"
-    # When the CI_COMMIT_TAG is present we are override the Gradle command
-    # and configuring the tag as the version to build
     - if: $CI_COMMIT_TAG
       variables:
         RELEASE: "${CI_COMMIT_TAG}"
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
-      when: never
-    - if: "$CI_COMMIT_BRANCH"
     - when: always
 
 shellcheck:
