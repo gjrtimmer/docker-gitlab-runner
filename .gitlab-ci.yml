@@ -23,13 +23,6 @@ shellcheck:
     pull_policy: always
   interruptible: true
   needs: []
-  rules:
-    - if: $CI_COMMIT_BRANCH
-      changes:
-        compare_to: "refs/heads/main"
-        paths:
-          - rootfs/*
-    - if: $TRIGGER_SHELLCHECK == 'ENABLED'
   before_script:
     - shellcheck --version
   after_script: []
