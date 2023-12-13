@@ -87,7 +87,6 @@ rebuild:
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $TRIGGER_REBUILD == 'ENABLED' && $CI_PIPELINE_SOURCE == "push"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $TRIGGER_REBUILD == 'ENABLED' && $CI_PIPELINE_SOURCE == "web"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_PIPELINE_SOURCE == "schedule"
-    - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_PIPELINE_SOURCE == "trigger"
   before_script: []
   after_script: []
   script:
@@ -110,7 +109,6 @@ rebuild:tags:
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $TRIGGER_REBUILD == 'ENABLED' && $CI_PIPELINE_SOURCE == "push"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $TRIGGER_REBUILD == 'ENABLED' && $CI_PIPELINE_SOURCE == "web"
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_PIPELINE_SOURCE == "schedule"
-    - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_PIPELINE_SOURCE == "trigger"
   inherit:
     variables: false
   trigger:
