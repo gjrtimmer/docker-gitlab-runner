@@ -15,12 +15,6 @@ variables:
     options:
       - "ENABLED"
       - "DISABLED"
-  TRIGGER_REBUILD:
-    description: Rebuild
-    value: "DISABLED"
-    options:
-      - "ENABLED"
-      - "DISABLED"
 
 workflow:
   rules:
