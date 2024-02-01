@@ -12,4 +12,4 @@ docker run \
     -e CI_SERVER_URL="${URL}" \
     -v "${PWD}"/data:/config \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -t registry.timmertech.nl/docker/gitlab-runner:"${VERSION}"
+    -t ${CI_REGISTRY}/docker/gitlab-runner:"${VERSION}"

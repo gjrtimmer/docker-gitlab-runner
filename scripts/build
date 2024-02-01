@@ -3,7 +3,7 @@
 declare -r VERSION="${1}"
 
 docker build \
-    --build-arg=DOCKER_IMAGE_BASE=registry.timmertech.nl/docker/alpine-base-service:latest \
+    --build-arg=DOCKER_IMAGE_BASE=${CI_REGISTRY}/docker/alpine-base-service:latest \
     --build-arg=REMOTE_VERSION="${VERSION}" \
-    -t registry.timmertech.nl/docker/gitlab-runner:"${VERSION}" \
+    -t ${CI_REGISTRY}/docker/gitlab-runner:"${VERSION}" \
     .

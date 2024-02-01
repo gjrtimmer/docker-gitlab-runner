@@ -7,7 +7,7 @@ cache: []
 
 variables:
   GIT_STRATEGY: clone
-  UPSTREAM_IMAGE: registry.timmertech.nl/docker/alpine-base-service
+  UPSTREAM_IMAGE: ${CI_REGISTRY}/docker/alpine-base-service
 
 rebuild:
   extends: .docker-build-multi

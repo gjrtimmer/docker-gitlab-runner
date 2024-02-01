@@ -8,7 +8,7 @@ cache: []
 
 variables:
   GIT_STRATEGY: clone
-  UPSTREAM_IMAGE: registry.timmertech.nl/docker/alpine-base-service
+  UPSTREAM_IMAGE: ${CI_REGISTRY}/docker/alpine-base-service
   TRIGGER_SHELLCHECK:
     description: Run ShellCheck
     value: "DISABLED"
@@ -47,7 +47,7 @@ shellcheck:
 check-new-tags:
   stage: test
   image:
-    name: registry.timmertech.nl/tools/gitlab-cli:latest
+    name: ${CI_REGISTRY}/tools/gitlab-cli:latest
     pull_policy: always
   rules:
     - if: $GITLAB_USER_NAME != "PROJECT_BOT_TOKEN" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"
@@ -62,7 +62,7 @@ check-new-tags:
 rebuild:
   stage: build
   image:
-    name: registry.timmertech.nl/docker/alpine-base:latest
+    name: ${CI_REGISTRY}/docker/alpine-base:latest
     pull_policy: always
   rules:
     - if: $CI_COMMIT_TAG
